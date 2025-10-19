@@ -12,5 +12,6 @@ if (!defined('NV_ADMIN'))
     die('Stop!!!');
 
 $submenu['main'] = $lang_module['main'];
+$submenu['add'] = $lang_module['add_book'];
 
-$allow_func = array('main');
+$allow_func = array('main', 'add', 'edit', 'delete');

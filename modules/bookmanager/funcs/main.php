@@ -11,20 +11,20 @@
 if (!defined('NV_IS_MOD_BOOKMANAGER'))
     die('Stop!!!');
 
-$page_title = $lang_module['main'];
+$page_title = $nv_Lang->getModule('main');
 
 $books = nv_get_books(10, 0);
 
-$contents = '<h2>' . $lang_module['main'] . '</h2>';
+$contents = '<h2>' . $nv_Lang->getModule('main') . '</h2>';
 if (!empty($books)) {
-    $contents .= '<ul>';
-    foreach ($books as $book) {
-        $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=detail&id=' . $book['id'];
-        $contents .= '<li><a href="' . $link . '"><strong>' . $book['title'] . '</strong></a> by ' . $book['author'] . '</li>';
-    }
-    $contents .= '</ul>';
+$contents .= '<ul>';
+foreach ($books as $book) {
+$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=detail&id=' . $book['id'];
+$contents .= '<li><a href="' . $link . '"><strong>' . $book['title'] . '</strong></a> by ' . $book['author'] . '</li>';
+}
+$contents .= '</ul>';
 } else {
-    $contents .= '<p>' . $lang_module['no_data'] . '</p>';
+$contents .= '<p>' . $nv_Lang->getModule('no_data') . '</p>';
 }
 
 include NV_ROOTDIR . '/includes/header.php';

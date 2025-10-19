@@ -141,3 +141,66 @@
     "agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0"
 }
 -------------------
+{
+    "time": "Sun, 19 Oct 2025 15:29:22 +0200",
+    "server": "localhost",
+    "ip": "::1",
+    "errno": "2 (Warning)",
+    "errstr": "Undefined array key \"add_book\"",
+    "file": "/modules/bookmanager/admin.menu.php",
+    "line": 15,
+    "request": "/nukeviet-nukeviet5.0/admin/vi/bookmanager/",
+    "method": "GET",
+    "agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0"
+}
+-------------------
+{
+    "time": "Sun, 19 Oct 2025 16:53:06 +0200",
+    "server": "",
+    "ip": "none",
+    "errno": "2 (Warning)",
+    "errstr": "Undefined array key \"SERVER_PROTOCOL\"",
+    "file": "C:/xampp/htdocs/nukeviet-nukeviet5.0/includes/vendor/vinades/nukeviet/Core/Server.php",
+    "line": 88
+}
+-------------------
+{
+    "time": "Sun, 19 Oct 2025 16:53:06 +0200",
+    "server": "",
+    "ip": "none",
+    "errno": "8192 (Deprecated Notice)",
+    "errstr": "preg_replace(): Passing null to parameter #3 ($subject) of type array|string is deprecated",
+    "file": "C:/xampp/htdocs/nukeviet-nukeviet5.0/includes/vendor/vinades/nukeviet/Core/Server.php",
+    "line": 88
+}
+-------------------
+{
+    "time": "Sun, 19 Oct 2025 16:53:06 +0200",
+    "server": "",
+    "ip": "none",
+    "errno": "2 (Warning)",
+    "errstr": "Undefined array key \"SERVER_PORT\"",
+    "file": "C:/xampp/htdocs/nukeviet-nukeviet5.0/includes/vendor/vinades/nukeviet/Core/Server.php",
+    "line": 95
+}
+-------------------
+{
+    "time": "Sun, 19 Oct 2025 16:53:06 +0200",
+    "server": "",
+    "ip": "none",
+    "errno": "2 (Warning)",
+    "errstr": "Undefined array key \"REQUEST_URI\"",
+    "file": "C:/xampp/htdocs/nukeviet-nukeviet5.0/includes/mainfile.php",
+    "line": 78
+}
+-------------------
+{
+    "time": "Sun, 19 Oct 2025 16:53:06 +0200",
+    "server": "",
+    "ip": "none",
+    "errno": "8192 (Deprecated Notice)",
+    "errstr": "Invalid characters passed for attempted conversion, these have been ignored",
+    "file": "C:/xampp/htdocs/nukeviet-nukeviet5.0/includes/vendor/vinades/nukeviet/Core/Ips.php",
+    "line": 330
+}
+-------------------

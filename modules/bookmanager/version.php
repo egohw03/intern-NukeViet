@@ -25,5 +25,6 @@ $module_version = array(
     'uploads_dir' => array(
         $module_name
     ),
-    'files_dir' => array()
+    'files_dir' => array(),
+    'icon' => 'fa-solid fa-book'
 );

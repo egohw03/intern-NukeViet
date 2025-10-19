@@ -1,10 +1,10 @@
 <!-- BEGIN: main -->
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h3 class="panel-title">{LANG.book_list}</h3>
+        <h3 class="panel-title">Danh sách sách</h3>
         <div class="pull-right">
-            <a href="{ADD_LINK}" class="btn btn-primary btn-sm">
-                <i class="fa fa-plus"></i> {LANG.add_book}
+            <a href="{$ADD_LINK}" class="btn btn-primary btn-sm">
+                <i class="fa fa-plus"></i> Thêm sách
             </a>
         </div>
         <div class="clearfix"></div>
@@ -14,15 +14,15 @@
             <table class="table table-striped table-bordered table-hover">
                 <thead>
                     <tr>
-                        <th class="text-center">{GLANG.id}</th>
-                        <th>{LANG.title}</th>
-                        <th>{LANG.author}</th>
-                        <th>{LANG.publisher}</th>
-                        <th>{LANG.publish_year}</th>
-                        <th>{LANG.isbn}</th>
-                        <th class="text-center">{LANG.status}</th>
-                        <th class="text-center">{GLANG.add_time}</th>
-                        <th class="text-center">{GLANG.funcs}</th>
+                        <th class="text-center">ID</th>
+                        <th>Tiêu đề</th>
+                        <th>Tác giả</th>
+                        <th>Nhà xuất bản</th>
+                        <th>Năm xuất bản</th>
+                        <th>ISBN</th>
+                        <th class="text-center">Trạng thái</th>
+                        <th class="text-center">Thời gian thêm</th>
+                        <th class="text-center">Chức năng</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -42,10 +42,10 @@
                         <td class="text-center">{DATA.add_time}</td>
                         <td class="text-center">
                             <a href="{DATA.edit_link}" class="btn btn-info btn-xs">
-                                <i class="fa fa-edit"></i> {LANG.edit}
+                                <i class="fa fa-edit"></i> Sửa
                             </a>
-                            <a href="{DATA.delete_link}" class="btn btn-danger btn-xs" onclick="return confirm('{GLANG.delete_confirm}')">
-                                <i class="fa fa-trash"></i> {LANG.delete}
+                            <a href="{DATA.delete_link}" class="btn btn-danger btn-xs" onclick="return confirm('Bạn có chắc chắn muốn xóa?')">
+                                <i class="fa fa-trash"></i> Xóa
                             </a>
                         </td>
                     </tr>
@@ -53,14 +53,14 @@
                     <!-- BEGIN: no_books -->
                     <tr>
                         <td colspan="9" class="text-center">
-                            <em>{LANG.no_books}</em>
+                            <em>Không có sách nào</em>
                         </td>
                     </tr>
                     <!-- END: no_books -->
                 </tbody>
             </table>
         </div>
-        
+
         <!-- BEGIN: pagination -->
         <div class="text-center">
             {PAGINATION}

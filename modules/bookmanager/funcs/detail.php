@@ -26,13 +26,13 @@ if (empty($book)) {
 $page_title = $book['title'];
 
 $contents = '<h1>' . $book['title'] . '</h1>';
-$contents .= '<p><strong>' . $lang_module['author'] . ':</strong> ' . $book['author'] . '</p>';
-$contents .= '<p><strong>' . $lang_module['publisher'] . ':</strong> ' . $book['publisher'] . '</p>';
-$contents .= '<p><strong>' . $lang_module['publish_year'] . ':</strong> ' . $book['publish_year'] . '</p>';
-$contents .= '<p><strong>' . $lang_module['isbn'] . ':</strong> ' . $book['isbn'] . '</p>';
-$contents .= '<p><strong>' . $lang_module['description'] . ':</strong></p>';
+$contents .= '<p><strong>' . $nv_Lang->getModule('author') . ':</strong> ' . $book['author'] . '</p>';
+$contents .= '<p><strong>' . $nv_Lang->getModule('publisher') . ':</strong> ' . $book['publisher'] . '</p>';
+$contents .= '<p><strong>' . $nv_Lang->getModule('publish_year') . ':</strong> ' . $book['publish_year'] . '</p>';
+$contents .= '<p><strong>' . $nv_Lang->getModule('isbn') . ':</strong> ' . $book['isbn'] . '</p>';
+$contents .= '<p><strong>' . $nv_Lang->getModule('description') . ':</strong></p>';
 $contents .= '<p>' . $book['description'] . '</p>';
-$contents .= '<p><a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '">' . $lang_module['back_to_list'] . '</a></p>';
+$contents .= '<p><a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '">' . $nv_Lang->getModule('back_to_list') . '</a></p>';
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);

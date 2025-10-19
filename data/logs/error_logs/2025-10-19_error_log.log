@@ -1,0 +1,145 @@
+{
+    "time": "Sun, 19 Oct 2025 15:29:22 +0200",
+    "server": "localhost",
+    "ip": "::1",
+    "errno": "1 (Error)",
+    "errstr": "Uncaught Error: Call to undefined function nv_get_books() in /modules/bookmanager/admin/main.php:16",
+    "file": "/modules/bookmanager/admin/main.php",
+    "line": 16,
+    "request": "/nukeviet-nukeviet5.0/admin/vi/bookmanager/",
+    "method": "GET",
+    "agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0",
+    "backtrace": [
+        "#0 /admin/index.php(170): require()",
+        "#1 {main}",
+        "thrown"
+    ]
+}
+-------------------
+{
+    "time": "Sun, 19 Oct 2025 16:04:48 +0200",
+    "server": "localhost",
+    "ip": "::1",
+    "errno": "1 (Error)",
+    "errstr": "Uncaught Error: Call to undefined function nv_get_books() in /modules/bookmanager/funcs/main.php:16",
+    "file": "/modules/bookmanager/funcs/main.php",
+    "line": 16,
+    "request": "/nukeviet-nukeviet5.0/vi/bookmanager/",
+    "method": "GET",
+    "agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0",
+    "backtrace": [
+        "#0 /index.php(307): require()",
+        "#1 {main}",
+        "thrown"
+    ]
+}
+-------------------
+{
+    "time": "Sun, 19 Oct 2025 16:05:19 +0200",
+    "server": "localhost",
+    "ip": "::1",
+    "errno": "1 (Error)",
+    "errstr": "Uncaught Error: Call to undefined function nv_get_book() in /modules/bookmanager/funcs/detail.php:21",
+    "file": "/modules/bookmanager/funcs/detail.php",
+    "line": 21,
+    "request": "/nukeviet-nukeviet5.0/vi/bookmanager/detail/?id=1",
+    "method": "GET",
+    "agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0",
+    "backtrace": [
+        "#0 /index.php(307): require()",
+        "#1 {main}",
+        "thrown"
+    ]
+}
+-------------------
+{
+    "time": "Sun, 19 Oct 2025 16:42:08 +0200",
+    "server": "localhost",
+    "ip": "::1",
+    "errno": "1 (Error)",
+    "errstr": "Uncaught  --> Smarty Compiler: Syntax error in template \"file:main.tpl\"  on line 4 \"<h3 class=\"panel-title\">{LANG.book_list}</h3>\"  - Unexpected \".\", expected one of: \"}\" <-- \n  thrown",
+    "file": "/themes/admin_default/modules/bookmanager/main.tpl",
+    "line": 4,
+    "request": "/nukeviet-nukeviet5.0/admin/vi/bookmanager/",
+    "method": "GET",
+    "agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0"
+}
+-------------------
+{
+    "time": "Sun, 19 Oct 2025 17:58:06 +0200",
+    "server": "localhost",
+    "ip": "::1",
+    "errno": "1 (Error)",
+    "errstr": "Uncaught  --> Smarty Compiler: Syntax error in template \"file:main.tpl\"  on line 6 \"<a href=\"{ADD_LINK}\" class=\"btn btn-primary btn-sm\">\" unknown tag 'ADD_LINK' <-- \n  thrown",
+    "file": "/themes/admin_default/modules/bookmanager/main.tpl",
+    "line": 6,
+    "request": "/nukeviet-nukeviet5.0/admin/vi/bookmanager/",
+    "method": "GET",
+    "agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0"
+}
+-------------------
+{
+    "time": "Sun, 19 Oct 2025 17:58:37 +0200",
+    "server": "localhost",
+    "ip": "::1",
+    "errno": "1 (Error)",
+    "errstr": "Uncaught  --> Smarty Compiler: Syntax error in template \"file:main.tpl\"  on line 17 \"<th class=\"text-center\">{GLANG.id}</th>\"  - Unexpected \".\", expected one of: \"}\" <-- \n  thrown",
+    "file": "/themes/admin_default/modules/bookmanager/main.tpl",
+    "line": 17,
+    "request": "/nukeviet-nukeviet5.0/admin/vi/bookmanager/",
+    "method": "GET",
+    "agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0"
+}
+-------------------
+{
+    "time": "Sun, 19 Oct 2025 17:59:12 +0200",
+    "server": "localhost",
+    "ip": "::1",
+    "errno": "1 (Error)",
+    "errstr": "Uncaught  --> Smarty Compiler: Syntax error in template \"file:main.tpl\"  on line 31 \"<td class=\"text-center\">{DATA.id}</td>\"  - Unexpected \".\", expected one of: \"}\" <-- \n  thrown",
+    "file": "/themes/admin_default/modules/bookmanager/main.tpl",
+    "line": 31,
+    "request": "/nukeviet-nukeviet5.0/admin/vi/bookmanager/",
+    "method": "GET",
+    "agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0"
+}
+-------------------
+{
+    "time": "Sun, 19 Oct 2025 18:04:31 +0200",
+    "server": "localhost",
+    "ip": "::1",
+    "errno": "4 (Parsing Error)",
+    "errstr": "syntax error, unexpected identifier \"B\u1ea1n\"",
+    "file": "/modules/bookmanager/admin/main.php",
+    "line": 81,
+    "request": "/nukeviet-nukeviet5.0/admin/vi/bookmanager/",
+    "method": "GET",
+    "agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0"
+}
+-------------------
+{
+    "time": "Sun, 19 Oct 2025 18:05:40 +0200",
+    "server": "localhost",
+    "ip": "::1",
+    "errno": "1 (Error)",
+    "errstr": "Uncaught  --> Smarty Compiler: Syntax error in template \"file:edit.tpl\"  on line 4 \"<h3 class=\"panel-title\">{LANG.edit_book}</h3>\"  - Unexpected \".\", expected one of: \"}\" <-- \n  thrown",
+    "file": "/themes/admin_default/modules/bookmanager/edit.tpl",
+    "line": 4,
+    "request": "/nukeviet-nukeviet5.0/admin/vi/bookmanager/edit/?id=1",
+    "method": "GET",
+    "agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0"
+}
+-------------------
+{
+    "time": "Sun, 19 Oct 2025 23:02:17 +0200",
+    "server": "localhost",
+    "ip": "::1",
+    "errno": "1 (Error)",
+    "errstr": "Uncaught  --> Smarty Compiler: Syntax error in template \"file:add.tpl\"  on line 4 \"<h3 class=\"panel-title\">{LANG.add_book}</h3>\"  - Unexpected \".\", expected one of: \"}\" <-- \n  thrown",
+    "file": "/themes/admin_default/modules/bookmanager/add.tpl",
+    "line": 4,
+    "request": "/nukeviet-nukeviet5.0/admin/vi/bookmanager/add/",
+    "method": "GET",
+    "agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0"
+}
+-------------------

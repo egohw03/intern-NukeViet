@@ -1,11 +1,11 @@
 <?php
-/* Smarty version 5.4.3, created on 2025-10-19 14:43:18
+/* Smarty version 5.4.3, created on 2025-10-19 23:05:05
   from 'file:block_articlelist.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.4.3',
-  'unifunc' => 'content_68f49696e91025_40925768',
+  'unifunc' => 'content_68f50c31354a29_65846916',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_68f49696e91025_40925768 (\Smarty\Template $_smarty_tpl) {
+function content_68f50c31354a29_65846916 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\nukeviet-nukeviet5.0\\themes\\default\\modules\\news\\smarty';
 if (( !true || empty($_smarty_tpl->getValue('CONFIGS')['tooltip_length'])) || $_smarty_tpl->getValue('CONFIGS')['tooltip_length'] < 50) {
 $_tmp_array = $_smarty_tpl->getValue('CONFIGS') ?? [];
@@ -34,9 +34,9 @@ $_smarty_tpl->assign('CONFIGS', $_tmp_array, false, NULL);
 <ul class="list-none list-items">
 <?php
 $_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('ITEMS'), 'item');
-$foreach15DoElse = true;
+$foreach16DoElse = true;
 foreach ($_from ?? [] as $_smarty_tpl->getVariable('item')->value) {
-$foreach15DoElse = false;
+$foreach16DoElse = false;
 ?>
     <li><a class="show clearfix" href="<?php echo $_smarty_tpl->getValue('item')['link'];?>
 "<?php if ($_smarty_tpl->getValue('item')['external_link']) {?> target="_blank"<?php }

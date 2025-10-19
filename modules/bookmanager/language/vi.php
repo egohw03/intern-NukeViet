@@ -25,3 +25,5 @@ $lang_module['publish_year'] = 'Năm xuất bản';
 $lang_module['isbn'] = 'ISBN';
 $lang_module['description'] = 'Mô tả';
 $lang_module['back_to_list'] = 'Quay lại danh sách';
+$lang_module['active'] = 'Hoạt động';
+$lang_module['inactive'] = 'Không hoạt động';
