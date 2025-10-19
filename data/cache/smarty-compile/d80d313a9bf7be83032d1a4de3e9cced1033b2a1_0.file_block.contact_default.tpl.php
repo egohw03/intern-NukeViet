@@ -1,11 +1,11 @@
 <?php
-/* Smarty version 5.4.3, created on 2025-10-19 23:05:04
+/* Smarty version 5.4.3, created on 2025-10-20 04:28:31
   from 'file:block.contact_default.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.4.3',
-  'unifunc' => 'content_68f50c304ae803_37434577',
+  'unifunc' => 'content_68f557ff411ff8_16926886',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_68f50c304ae803_37434577 (\Smarty\Template $_smarty_tpl) {
+function content_68f557ff411ff8_16926886 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\nukeviet-nukeviet5.0\\themes\\default\\modules\\contact\\smarty';
 ?><span class="visible-xs-inline-block"><a title="<?php echo $_smarty_tpl->getValue('LANG')->getModule('contactUs');?>
 " class="pointer button" data-toggle="tip" data-target="#contactList" data-click="y"><em class="icon-old-phone icon-lg"></em><span class="hidden"><?php echo $_smarty_tpl->getValue('LANG')->getModule('contactUs');?>

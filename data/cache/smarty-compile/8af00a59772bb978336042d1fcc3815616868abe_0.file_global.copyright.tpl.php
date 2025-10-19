@@ -1,11 +1,11 @@
 <?php
-/* Smarty version 5.4.3, created on 2025-10-19 23:05:02
+/* Smarty version 5.4.3, created on 2025-10-20 04:28:29
   from 'file:global.copyright.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.4.3',
-  'unifunc' => 'content_68f50c2ed13803_95729961',
+  'unifunc' => 'content_68f557fd625a84_61573274',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_68f50c2ed13803_95729961 (\Smarty\Template $_smarty_tpl) {
+function content_68f557fd625a84_61573274 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\nukeviet-nukeviet5.0\\themes\\default\\blocks\\smarty';
 ?><div class="copyright">
     <span>&copy;&nbsp;<?php echo $_smarty_tpl->getValue('LANG')->get('copyright_by');?>

@@ -1,11 +1,11 @@
 <?php
-/* Smarty version 5.4.3, created on 2025-10-19 23:05:05
+/* Smarty version 5.4.3, created on 2025-10-20 04:28:32
   from 'file:block_articlelist.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.4.3',
-  'unifunc' => 'content_68f50c31354a29_65846916',
+  'unifunc' => 'content_68f55800b1a2a7_55870538',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_68f50c31354a29_65846916 (\Smarty\Template $_smarty_tpl) {
+function content_68f55800b1a2a7_55870538 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\nukeviet-nukeviet5.0\\themes\\default\\modules\\news\\smarty';
 if (( !true || empty($_smarty_tpl->getValue('CONFIGS')['tooltip_length'])) || $_smarty_tpl->getValue('CONFIGS')['tooltip_length'] < 50) {
 $_tmp_array = $_smarty_tpl->getValue('CONFIGS') ?? [];

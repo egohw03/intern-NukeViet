@@ -18,6 +18,31 @@ error_reporting(E_ALL);
 
 $page_title = isset($lang_module['main']) ? $lang_module['main'] : 'Quản lý sách';
 
+// Debug
+if (empty($lang_global)) {
+    $lang_global = [
+        'id' => 'ID',
+        'add_time' => 'Thời gian thêm',
+        'funcs' => 'Chức năng'
+    ];
+}
+
+if (empty($lang_module)) {
+    $lang_module = [
+        'book_list' => 'Danh sách sách',
+        'add_book' => 'Thêm sách',
+        'title' => 'Tiêu đề',
+        'author' => 'Tác giả',
+        'publisher' => 'Nhà xuất bản',
+        'publish_year' => 'Năm xuất bản',
+        'isbn' => 'ISBN',
+        'status' => 'Trạng thái',
+        'edit' => 'Sửa',
+        'delete' => 'Xóa',
+        'no_books' => 'Không có sách nào'
+    ];
+}
+
 $books = nv_get_books(100, 0); // Lấy tất cả sách
 
 // Xử lý dữ liệu sách cho template
@@ -33,10 +58,10 @@ foreach ($books as $book) {
 
 $contents = '<div class="panel panel-default">
     <div class="panel-heading">
-        <h3 class="panel-title">Danh sách sách</h3>
+        <h3 class="panel-title">' . $lang_module['book_list'] . '</h3>
         <div class="pull-right">
             <a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=add" class="btn btn-primary btn-sm">
-                <i class="fa fa-plus"></i> Thêm sách
+                <i class="fa fa-plus"></i> ' . $lang_module['add_book'] . '
             </a>
         </div>
         <div class="clearfix"></div>
@@ -46,15 +71,15 @@ $contents = '<div class="panel panel-default">
             <table class="table table-striped table-bordered table-hover">
                 <thead>
                     <tr>
-                        <th class="text-center">ID</th>
-                        <th>Tiêu đề</th>
-                        <th>Tác giả</th>
-                        <th>Nhà xuất bản</th>
-                        <th>Năm xuất bản</th>
-                        <th>ISBN</th>
-                        <th class="text-center">Trạng thái</th>
-                        <th class="text-center">Thời gian thêm</th>
-                        <th class="text-center">Chức năng</th>
+                        <th class="text-center">' . $lang_global['id'] . '</th>
+                        <th style="width: 25%;">' . $lang_module['title'] . '</th>
+                        <th>' . $lang_module['author'] . '</th>
+                        <th>' . $lang_module['publisher'] . '</th>
+                        <th>' . $lang_module['publish_year'] . '</th>
+                        <th>' . $lang_module['isbn'] . '</th>
+                        <th class="text-center">' . $lang_module['status'] . '</th>
+                        <th class="text-center">' . $lang_global['add_time'] . '</th>
+                        <th class="text-center">' . $lang_global['funcs'] . '</th>
                     </tr>
                 </thead>
                 <tbody>';
@@ -63,7 +88,7 @@ if (!empty($processed_books)) {
     foreach ($processed_books as $book) {
         $contents .= '<tr>
                         <td class="text-center">' . $book['id'] . '</td>
-                        <td>
+                        <td style="width: 25%;">
                             <strong>' . $book['title'] . '</strong>
                         </td>
                         <td>' . $book['author'] . '</td>
@@ -76,10 +101,10 @@ if (!empty($processed_books)) {
                         <td class="text-center">' . $book['add_time'] . '</td>
                         <td class="text-center">
                             <a href="' . $book['edit_link'] . '" class="btn btn-info btn-xs">
-                                <i class="fa fa-edit"></i> Sửa
+                                <i class="fa fa-edit"></i> ' . $lang_module['edit'] . '
                             </a>
-                            <a href="' . $book['delete_link'] . '" class="btn btn-danger btn-xs" onclick="return confirm(\'Bạn có chắc chắn muốn xóa?\')">
-                                <i class="fa fa-trash"></i> Xóa
+                            <a href="' . $book['delete_link'] . '" class="btn btn-danger btn-xs" onclick="return confirm(nv_is_del_confirm[0]);">
+                                <i class="fa fa-trash"></i> ' . $lang_module['delete'] . '
                             </a>
                         </td>
                     </tr>';
@@ -87,7 +112,7 @@ if (!empty($processed_books)) {
 } else {
     $contents .= '<tr>
                         <td colspan="9" class="text-center">
-                            <em>Không có sách nào</em>
+                            <em>' . $lang_module['no_books'] . '</em>
                         </td>
                     </tr>';
 }
