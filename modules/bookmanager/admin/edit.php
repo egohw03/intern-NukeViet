@@ -1,81 +1,158 @@
 <?php
 
-/**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2009-2025 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Oct 19, 2025
- */
+if (!defined('NV_IS_FILE_ADMIN')) die('Stop!!!');
 
-if (!defined('NV_IS_FILE_ADMIN'))
-    die('Stop!!!');
+global $module_upload;
 
-global $nv_Request, $module_name, $module_data, $nv_Lang;
+use NukeViet\Files\Upload;
 
 $id = $nv_Request->get_int('id', 'get', 0);
+
 if ($id <= 0) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
-$page_title = $nv_Lang->getModule('edit_book');
+global $lang_module;
 
-$error = '';
-$success = '';
+$page_title = 'Sửa sách';
 
-$book = nv_get_book($id);
+// Load book data
+$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_books WHERE id = ' . $id;
+$book = $db->query($sql)->fetch();
+
 if (empty($book)) {
-    nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
+$errors = [];
+
 if ($nv_Request->isset_request('submit', 'post')) {
-    $title = $nv_Request->get_title('title', 'post', '', 1);
-    $author = $nv_Request->get_title('author', 'post', '', 1);
-    $publisher = $nv_Request->get_title('publisher', 'post', '');
-    $publish_year = $nv_Request->get_int('publish_year', 'post', 0);
-    $isbn = $nv_Request->get_title('isbn', 'post', '');
-    $description = $nv_Request->get_textarea('description', 'post', '', 'br');
-    $status = $nv_Request->get_int('status', 'post', 1);
+    $book['title'] = $nv_Request->get_title('title', 'post', '');
+    $book['author'] = $nv_Request->get_title('author', 'post', '');
+    $book['publisher'] = $nv_Request->get_title('publisher', 'post', '');
+    $book['publish_year'] = $nv_Request->get_int('publish_year', 'post', 0);
+    $book['isbn'] = $nv_Request->get_title('isbn', 'post', '');
+    $book['description'] = $nv_Request->get_textarea('description', '', NV_ALLOWED_HTML_TAGS);
+    $book['status'] = $nv_Request->get_int('status', 'post', 1);
 
-    if (empty($title)) {
-        $error = $lang_module['error_title'];
-    } elseif (empty($author)) {
-        $error = $lang_module['error_author'];
-    } else {
-        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_books SET
-            title = ' . $db->quote($title) . ',
-            author = ' . $db->quote($author) . ',
-            publisher = ' . $db->quote($publisher) . ',
-            publish_year = ' . intval($publish_year) . ',
-            isbn = ' . $db->quote($isbn) . ',
-            description = ' . $db->quote($description) . ',
-            edit_time = ' . NV_CURRENTTIME . ',
-            status = ' . intval($status) . '
-        WHERE id = ' . $id;
+    // Validate
+    if (empty($book['title'])) {
+        $errors[] = 'Vui lòng nhập tiêu đề sách';
+    }
+    if (empty($book['author'])) {
+        $errors[] = 'Vui lòng nhập tác giả';
+    }
 
-        if ($db->query($sql)) {
-            $nv_Cache->delMod($module_name);
-            $success = $nv_Lang->getModule('success_edit');
+    // Upload new image if provided
+    if (isset($_FILES['image']) && is_uploaded_file($_FILES['image']['tmp_name'])) {
+        // Delete old image
+        if (!empty($book['image'])) {
+            $old_image_path = NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $book['image'];
+            if (file_exists($old_image_path)) {
+                unlink($old_image_path);
+            }
+        }
+
+        $upload = new Upload($upload_info = [
+            'nv_path' => NV_UPLOADS_DIR . '/' . $module_upload,
+            'path' => '',
+            'maxfile' => '',
+            'type' => ''
+        ], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
+
+        $upload->setLanguage($nv_Lang);
+
+        $upload_info = $upload->save_file($_FILES['image'], NV_UPLOADS_REAL_DIR . '/' . $module_upload, false, $global_config['auto_resize']);
+
+        if (empty($upload_info['error'])) {
+            $book['image'] = $upload_info['basename'];
+        } else {
+            $errors[] = $upload_info['error'];
+        }
+    }
+
+    if (empty($errors)) {
+        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_books SET title = :title, author = :author, publisher = :publisher, publish_year = :publish_year, isbn = :isbn, description = :description, image = :image, edit_time = :edit_time, status = :status WHERE id = :id';
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':title', $book['title'], PDO::PARAM_STR);
+        $stmt->bindParam(':author', $book['author'], PDO::PARAM_STR);
+        $stmt->bindParam(':publisher', $book['publisher'], PDO::PARAM_STR);
+        $stmt->bindParam(':publish_year', $book['publish_year'], PDO::PARAM_INT);
+        $stmt->bindParam(':isbn', $book['isbn'], PDO::PARAM_STR);
+        $stmt->bindParam(':description', $book['description'], PDO::PARAM_STR);
+        $stmt->bindParam(':image', $book['image'], PDO::PARAM_STR);
+        $stmt->bindValue(':edit_time', NV_CURRENTTIME, PDO::PARAM_INT);
+        $stmt->bindParam(':status', $book['status'], PDO::PARAM_INT);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
+        if ($stmt->execute()) {
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
         } else {
-            $error = $nv_Lang->getModule('error_save');
+            $errors[] = 'Lỗi khi cập nhật dữ liệu';
         }
     }
 }
 
-$tpl = new \NukeViet\Template\NVSmarty();
-$tpl->setTemplateDir(get_module_tpl_dir('edit.tpl'));
-$tpl->assign('LANG', $nv_Lang);
-$tpl->assign('GLANG', $lang_global);
-$tpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=edit&id=' . $id);
-$tpl->assign('CANCEL_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-$tpl->assign('BOOK', $book);
-$tpl->assign('CHECKED_ACTIVE', $book['status'] ? 'checked' : '');
-$tpl->assign('CHECKED_INACTIVE', !$book['status'] ? 'checked' : '');
-$tpl->assign('ERROR', $error);
-$tpl->assign('SUCCESS', $success);
+$contents = '<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Sửa sách</h3>
+    </div>
+    <div class="panel-body">';
 
-$contents = $tpl->fetch('edit.tpl');
+if (!empty($errors)) {
+    $contents .= '<div class="alert alert-danger">';
+    foreach ($errors as $error) {
+        $contents .= '<p>' . $error . '</p>';
+    }
+    $contents .= '</div>';
+}
+
+$contents .= '<form method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label>Tiêu đề</label>
+        <input type="text" class="form-control" name="title" value="' . htmlspecialchars($book['title']) . '" required>
+    </div>
+    <div class="form-group">
+        <label>Tác giả</label>
+        <input type="text" class="form-control" name="author" value="' . htmlspecialchars($book['author']) . '" required>
+    </div>
+    <div class="form-group">
+        <label>Nhà xuất bản</label>
+        <input type="text" class="form-control" name="publisher" value="' . htmlspecialchars($book['publisher']) . '">
+    </div>
+    <div class="form-group">
+        <label>Năm xuất bản</label>
+        <input type="number" class="form-control" name="publish_year" value="' . $book['publish_year'] . '">
+    </div>
+    <div class="form-group">
+        <label>ISBN</label>
+        <input type="text" class="form-control" name="isbn" value="' . htmlspecialchars($book['isbn']) . '">
+    </div>
+    <div class="form-group">
+        <label>Mô tả</label>
+        <textarea class="form-control" name="description" rows="5">' . htmlspecialchars($book['description']) . '</textarea>
+    </div>
+    <div class="form-group">
+        <label>Hình ảnh hiện tại</label><br>';
+if (!empty($book['image'])) {
+    $image_url = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $book['image'];
+    $contents .= '<img src="' . $image_url . '" style="max-width: 200px;"><br>';
+}
+$contents .= '        <label>Upload hình ảnh mới (để trống nếu không thay đổi)</label>
+        <input type="file" class="form-control" name="image" accept="image/*">
+    </div>
+    <div class="form-group">
+        <label>Trạng thái</label>
+        <select class="form-control" name="status">
+            <option value="1" ' . ($book['status'] == 1 ? 'selected' : '') . '>Hoạt động</option>
+            <option value="0" ' . ($book['status'] == 0 ? 'selected' : '') . '>Không hoạt động</option>
+        </select>
+    </div>
+    <button type="submit" name="submit" class="btn btn-primary">Lưu</button>
+    <a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '" class="btn btn-default">Hủy</a>
+</form>
+    </div>
+</div>';
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);
