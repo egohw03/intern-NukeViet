@@ -1,50 +1,69 @@
 <?php
 
-/**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2009-2025 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Oct 19, 2025
- */
+if (!defined('NV_IS_FILE_ADMIN')) die('Stop!!!');
 
-if (!defined('NV_IS_FILE_ADMIN'))
-    die('Stop!!!');
-
-global $nv_Request, $module_name, $module_data, $nv_Lang;
+global $module_upload;
 
 $id = $nv_Request->get_int('id', 'get', 0);
+
 if ($id <= 0) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
-$book = nv_get_book($id);
+global $lang_module;
+
+// Check if book exists
+$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_books WHERE id = ' . $id;
+$book = $db->query($sql)->fetch();
+
 if (empty($book)) {
-    nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
+$page_title = 'Xóa sách: ' . $book['title'];
+
+$errors = [];
+
 if ($nv_Request->isset_request('confirm', 'post')) {
+    // Delete image if exists
+    if (!empty($book['image'])) {
+        $image_path = NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $book['image'];
+        if (file_exists($image_path)) {
+            unlink($image_path);
+        }
+    }
+
+    // Delete from database
     $sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_books WHERE id = ' . $id;
-    if ($db->query($sql)) {
-        $nv_Cache->delMod($module_name);
+    if ($db->exec($sql)) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
     } else {
-        $error = $nv_Lang->getModule('error_save');
+        $errors[] = 'Lỗi khi xóa sách';
     }
 }
 
-$page_title = $nv_Lang->getModule('delete_book');
+$contents = '<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Xác nhận xóa sách</h3>
+    </div>
+    <div class="panel-body">';
 
-$tpl = new \NukeViet\Template\NVSmarty();
-$tpl->setTemplateDir(get_module_tpl_dir('delete.tpl'));
-$tpl->assign('LANG', $nv_Lang);
-$tpl->assign('GLANG', $lang_global);
-$tpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=delete&id=' . $id);
-$tpl->assign('CANCEL_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-$tpl->assign('BOOK', $book);
-$tpl->assign('ERROR', $error);
+if (!empty($errors)) {
+    $contents .= '<div class="alert alert-danger">';
+    foreach ($errors as $error) {
+        $contents .= '<p>' . $error . '</p>';
+    }
+    $contents .= '</div>';
+}
 
-$contents = $tpl->fetch('delete.tpl');
+$contents .= '<p>Bạn có chắc chắn muốn xóa sách "<strong>' . $book['title'] . '</strong>" của tác giả "' . $book['author'] . '"?</p>
+    <p>Hành động này không thể hoàn tác.</p>
+    <form method="post">
+        <button type="submit" name="confirm" class="btn btn-danger">Xóa</button>
+        <a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '" class="btn btn-default">Hủy</a>
+    </form>
+    </div>
+</div>';
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);
