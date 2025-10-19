@@ -1,0 +1,13 @@
+{
+    "time": "Sat, 11 Oct 2025 17:26:22 +0700",
+    "server": "localhost",
+    "ip": "::1",
+    "errno": "1024 (User Notice)",
+    "errstr": "SQLSTATE&lbrack;HY000&rbrack; &lbrack;1045&rbrack; Access denied for user 'egohw'@'localhost' (using password: YES)",
+    "file": "/includes/vendor/vinades/nukeviet/Core/Database.php",
+    "line": 95,
+    "request": "/nukeviet-nukeviet5.0/src/install/index.php?language=vi&step=5",
+    "method": "POST",
+    "agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0"
+}
+-------------------

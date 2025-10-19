@@ -1,0 +1,67 @@
+/* Book Manager Admin CSS */
+
+.bookmanager-admin .panel-heading {
+    background: linear-gradient(to right, #f8f9fa, #e9ecef);
+    border-bottom: 1px solid #dee2e6;
+}
+
+.bookmanager-admin .table th {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.bookmanager-admin .label-active {
+    background-color: #28a745;
+}
+
+.bookmanager-admin .label-inactive {
+    background-color: #dc3545;
+}
+
+.bookmanager-admin .btn-xs {
+    padding: 1px 5px;
+    font-size: 11px;
+    border-radius: 3px;
+}
+
+.bookmanager-admin .form-group label {
+    font-weight: 600;
+    color: #495057;
+}
+
+.bookmanager-admin .form-control:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.bookmanager-admin .alert {
+    border-radius: 4px;
+}
+
+.bookmanager-admin .thumbnail {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 4px;
+}
+
+.bookmanager-admin .thumbnail img {
+    border-radius: 2px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .bookmanager-admin .table-responsive {
+        border: none;
+    }
+    
+    .bookmanager-admin .btn-xs {
+        display: block;
+        width: 100%;
+        margin-bottom: 2px;
+    }
+    
+    .bookmanager-admin .pull-right {
+        float: none !important;
+        margin-top: 10px;
+    }
+}
