@@ -16,7 +16,7 @@ global $module_name, $module_data, $nv_Lang, $lang_global, $lang_module;
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-$page_title = $nv_Lang->getModule('main');
+$page_title = isset($lang_module['main']) ? $lang_module['main'] : 'Quản lý sách';
 
 $books = nv_get_books(100, 0); // Lấy tất cả sách
 

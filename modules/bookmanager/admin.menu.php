@@ -11,7 +11,7 @@
 if (!defined('NV_ADMIN'))
     die('Stop!!!');
 
-$submenu['main'] = $lang_module['main'];
-$submenu['add'] = $lang_module['add_book'];
+$submenu['main'] = 'Quản lý sách';
+$submenu['add'] = 'Thêm sách';
 
 $allow_func = array('main', 'add', 'edit', 'delete');
