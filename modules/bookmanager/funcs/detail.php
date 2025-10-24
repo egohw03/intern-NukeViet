@@ -25,6 +25,14 @@ if (empty($book)) {
 
 $page_title = $book['title'];
 
+// Breadcrumb
+global $array_mod_title;
+$array_mod_title[] = [
+    'catid' => 0,
+    'title' => 'Detail',
+    'link' => ''
+];
+
 $contents = '<h1>' . $book['title'] . '</h1>';
 $contents .= '<p><strong>' . $nv_Lang->getModule('author') . ':</strong> ' . $book['author'] . '</p>';
 $contents .= '<p><strong>' . $nv_Lang->getModule('publisher') . ':</strong> ' . $book['publisher'] . '</p>';
