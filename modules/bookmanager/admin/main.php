@@ -43,7 +43,7 @@ if (empty($lang_module)) {
     ];
 }
 
-$books = nv_get_books(100, 0); // Lấy tất cả sách
+$books = nv_get_books(100, 0, false); // Lấy tất cả sách, bao gồm không hoạt động
 
 // Xử lý dữ liệu sách cho template
 $processed_books = [];
