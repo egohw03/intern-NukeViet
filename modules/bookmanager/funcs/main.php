@@ -11,21 +11,33 @@
 if (!defined('NV_IS_MOD_BOOKMANAGER'))
     die('Stop!!!');
 
+global $lang_module;
+
 $page_title = $nv_Lang->getModule('main');
 
 $books = nv_get_books(10, 0);
 
-$contents = '<h2>' . $nv_Lang->getModule('main') . '</h2>';
+$xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$xtpl->assign('LANG', $lang_module);
+
 if (!empty($books)) {
-$contents .= '<ul>';
-foreach ($books as $book) {
-$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=detail&id=' . $book['id'];
-$contents .= '<li><a href="' . $link . '"><strong>' . $book['title'] . '</strong></a> by ' . $book['author'] . '</li>';
-}
-$contents .= '</ul>';
+    foreach ($books as $book) {
+        $book['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=detail&id=' . $book['id'];
+        $book['image'] = !empty($book['image']) ? NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $book['image'] : '';
+        $xtpl->assign('BOOK', $book);
+        if (!empty($book['image'])) {
+            $xtpl->parse('main.book_loop.image');
+        } else {
+            $xtpl->parse('main.book_loop.no_image');
+        }
+        $xtpl->parse('main.book_loop');
+    }
 } else {
-$contents .= '<p>' . $nv_Lang->getModule('no_data') . '</p>';
+    $xtpl->parse('main.no_books');
 }
+
+$xtpl->parse('main');
+$contents = $xtpl->text('main');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);
