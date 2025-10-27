@@ -1,0 +1,20 @@
+{
+    "time": "Mon, 27 Oct 2025 15:52:18 +0100",
+    "server": "localhost",
+    "ip": "::1",
+    "errno": "1 (Error)",
+    "errstr": "Uncaught PDOException: SQLSTATE&lbrack;42S22&rbrack;: Column not found: 1054 Unknown column 'price' in 'field list' in /includes/vendor/vinades/nukeviet/Core/Database.php:577",
+    "file": "/includes/vendor/vinades/nukeviet/Core/Database.php",
+    "line": 577,
+    "request": "/nukeviet-nukeviet5.0/admin/vi/bookmanager/edit/?id=5",
+    "method": "POST",
+    "agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0",
+    "backtrace": [
+        "#0 /includes/vendor/vinades/nukeviet/Core/Database.php(577): PDO->prepare('UPDATE nv5_vi_b...', Array)",
+        "#1 /modules/bookmanager/admin/edit.php(78): NukeViet/Core/Database->prepare('UPDATE nv5_vi_b...')",
+        "#2 /admin/index.php(170): require('C:/xampp/htdocs...')",
+        "#3 {main}",
+        "thrown"
+    ]
+}
+-------------------

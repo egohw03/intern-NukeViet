@@ -78,8 +78,10 @@ $contents = '<div class="panel panel-default">
                         <th>' . $lang_module['publish_year'] . '</th>
                         <th>' . $lang_module['isbn'] . '</th>
                         <th class="text-center">' . $lang_module['status'] . '</th>
-                        <th class="text-center">' . $lang_global['add_time'] . '</th>
-                        <th class="text-center">' . $lang_global['funcs'] . '</th>
+                        <th class="text-center">Giá bán</th>
+                        <th class="text-center">Tồn kho</th>
+                         <th class="text-center">' . $lang_global['add_time'] . '</th>
+                         <th class="text-center">' . $lang_global['funcs'] . '</th>
                     </tr>
                 </thead>
                 <tbody>';
@@ -95,10 +97,12 @@ if (!empty($processed_books)) {
                         <td>' . $book['publisher'] . '</td>
                         <td class="text-center">' . $book['publish_year'] . '</td>
                         <td>' . $book['isbn'] . '</td>
+                        <td class="text-center">' . number_format($book['price'], 0, ',', '.') . ' VNĐ</td>
+                        <td class="text-center">' . $book['stock_quantity'] . '</td>
                         <td class="text-center">
                             <span class="label label-' . $book['status_class'] . '">' . $book['status_text'] . '</span>
-                        </td>
-                        <td class="text-center">' . $book['add_time'] . '</td>
+                         </td>
+                         <td class="text-center">' . $book['add_time'] . '</td>
                         <td class="text-center">
                             <a href="' . $book['edit_link'] . '" class="btn btn-info btn-xs">
                                 <i class="fa fa-edit"></i> ' . $lang_module['edit'] . '
@@ -111,7 +115,7 @@ if (!empty($processed_books)) {
     }
 } else {
     $contents .= '<tr>
-                        <td colspan="9" class="text-center">
+    <td colspan="11" class="text-center">
                             <em>' . $lang_module['no_books'] . '</em>
                         </td>
                     </tr>';

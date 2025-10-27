@@ -32,8 +32,16 @@
                 <div class="book-meta">
                     <table class="table table-striped">
                         <tr>
-                            <td width="120"><strong>{LANG.author}:</strong></td>
-                            <td>{BOOK.author}</td>
+                        <td width="120"><strong>{LANG.author}:</strong></td>
+                        <td>{BOOK.author}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Giá bán:</strong></td>
+                            <td>{BOOK.price} VNĐ</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tồn kho:</strong></td>
+                            <td>{BOOK.stock_quantity}</td>
                         </tr>
                         <!-- BEGIN: publisher -->
                         <tr>
@@ -58,12 +66,20 @@
                 
                 <!-- BEGIN: description -->
                 <div class="book-description">
-                    <h4>{LANG.description}</h4>
-                    <div class="well">
-                        {BOOK.description}
-                    </div>
+                <h4>{LANG.description}</h4>
+                <div class="well">
+                {BOOK.description}
+                </div>
                 </div>
                 <!-- END: description -->
+                <div class="book-actions" style="margin-top: 20px;">
+                    <!-- BEGIN: in_stock -->
+                    <a href="{ADD_TO_CART_LINK}" class="btn btn-success btn-lg">Thêm vào giỏ hàng</a>
+                    <!-- END: in_stock -->
+                    <!-- BEGIN: out_of_stock -->
+                    <button class="btn btn-secondary btn-lg" disabled>Hết hàng</button>
+                    <!-- END: out_of_stock -->
+                </div>
             </div>
         </div>
     </div>

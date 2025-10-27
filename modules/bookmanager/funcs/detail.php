@@ -28,19 +28,73 @@ $page_title = $book['title'];
 // Breadcrumb
 global $array_mod_title;
 $array_mod_title[] = [
-    'catid' => 0,
-    'title' => 'Detail',
-    'link' => ''
+'catid' => 0,
+'title' => 'Detail',
+'link' => ''
 ];
 
-$contents = '<h1>' . $book['title'] . '</h1>';
-$contents .= '<p><strong>' . $nv_Lang->getModule('author') . ':</strong> ' . $book['author'] . '</p>';
-$contents .= '<p><strong>' . $nv_Lang->getModule('publisher') . ':</strong> ' . $book['publisher'] . '</p>';
-$contents .= '<p><strong>' . $nv_Lang->getModule('publish_year') . ':</strong> ' . $book['publish_year'] . '</p>';
-$contents .= '<p><strong>' . $nv_Lang->getModule('isbn') . ':</strong> ' . $book['isbn'] . '</p>';
-$contents .= '<p><strong>' . $nv_Lang->getModule('description') . ':</strong></p>';
-$contents .= '<p>' . $book['description'] . '</p>';
-$contents .= '<p><a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '">' . $nv_Lang->getModule('back_to_list') . '</a></p>';
+$xtpl = new XTemplate('detail.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('BOOK', $book);
+$xtpl->assign('BACK_LINK', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
+
+if (!empty($book['image'])) {
+    $xtpl->parse('main.image');
+} else {
+    $xtpl->parse('main.no_image');
+}
+
+if (!empty($book['publisher'])) {
+    $xtpl->parse('main.publisher');
+}
+
+if (!empty($book['publish_year'])) {
+    $xtpl->parse('main.publish_year');
+}
+
+if (!empty($book['isbn'])) {
+    $xtpl->parse('main.isbn');
+}
+
+if (!empty($book['description'])) {
+    $xtpl->parse('main.description');
+}
+
+if ($book['stock_quantity'] > 0) {
+    $xtpl->assign('ADD_TO_CART_LINK', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&op=cart&action=add&id=' . $book['id']);
+    $xtpl->parse('main.in_stock');
+} else {
+    $xtpl->parse('main.out_of_stock');
+}
+
+// Related books
+$related_books = nv_get_books(6, 0);
+$related_books = array_filter($related_books, function($b) use ($book) {
+    return $b['id'] != $book['id'] && $b['author'] == $book['author'];
+});
+if (empty($related_books)) {
+    $related_books = array_slice(array_filter(nv_get_books(10, 0), function($b) use ($book) {
+        return $b['id'] != $book['id'];
+    }), 0, 6);
+}
+
+if (!empty($related_books)) {
+    foreach ($related_books as $related) {
+        $related['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=detail&id=' . $related['id'];
+        $xtpl->assign('RELATED_BOOK', $related);
+        if (!empty($related['image'])) {
+            $xtpl->parse('main.related_books.related_loop.image');
+        } else {
+            $xtpl->parse('main.related_books.related_loop.no_image');
+        }
+        $xtpl->parse('main.related_books.related_loop');
+    }
+    $xtpl->parse('main.related_books');
+}
+
+$xtpl->parse('main');
+$contents = $xtpl->text('main');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);

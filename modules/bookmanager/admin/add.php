@@ -17,6 +17,8 @@ $book = [
     'isbn' => '',
     'description' => '',
     'image' => '',
+    'price' => 0,
+    'stock_quantity' => 0,
     'status' => 1
 ];
 
@@ -27,6 +29,8 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $book['publish_year'] = $nv_Request->get_int('publish_year', 'post', 0);
     $book['isbn'] = $nv_Request->get_title('isbn', 'post', '');
     $book['description'] = $nv_Request->get_textarea('description', '', NV_ALLOWED_HTML_TAGS);
+    $book['price'] = $nv_Request->get_float('price', 'post', 0);
+    $book['stock_quantity'] = $nv_Request->get_int('stock_quantity', 'post', 0);
     $book['status'] = $nv_Request->get_int('status', 'post', 1);
 
     // Validate
@@ -58,7 +62,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     }
 
     if (empty($errors)) {
-        $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_books (title, author, publisher, publish_year, isbn, description, image, add_time, status) VALUES (:title, :author, :publisher, :publish_year, :isbn, :description, :image, :add_time, :status)';
+        $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_books (title, author, publisher, publish_year, isbn, description, image, price, stock_quantity, add_time, status) VALUES (:title, :author, :publisher, :publish_year, :isbn, :description, :image, :price, :stock_quantity, :add_time, :status)';
         $stmt = $db->prepare($sql);
         $stmt->bindParam(':title', $book['title'], PDO::PARAM_STR);
         $stmt->bindParam(':author', $book['author'], PDO::PARAM_STR);
@@ -67,6 +71,8 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $stmt->bindParam(':isbn', $book['isbn'], PDO::PARAM_STR);
         $stmt->bindParam(':description', $book['description'], PDO::PARAM_STR);
         $stmt->bindParam(':image', $book['image'], PDO::PARAM_STR);
+        $stmt->bindParam(':price', $book['price'], PDO::PARAM_STR);
+        $stmt->bindParam(':stock_quantity', $book['stock_quantity'], PDO::PARAM_INT);
         $stmt->bindValue(':add_time', NV_CURRENTTIME, PDO::PARAM_INT);
         $stmt->bindParam(':status', $book['status'], PDO::PARAM_INT);
 
@@ -118,8 +124,16 @@ $contents .= '<form method="post" enctype="multipart/form-data">
         <textarea class="form-control" name="description" rows="5">' . $book['description'] . '</textarea>
     </div>
     <div class="form-group">
-        <label>Hình ảnh</label>
-        <input type="file" class="form-control" name="image" accept="image/*">
+    <label>Hình ảnh</label>
+    <input type="file" class="form-control" name="image" accept="image/*">
+    </div>
+    <div class="form-group">
+    <label>Giá bán (VNĐ)</label>
+    <input type="number" class="form-control" name="price" value="' . $book['price'] . '" step="0.01" min="0" required>
+    </div>
+    <div class="form-group">
+    <label>Số lượng tồn kho</label>
+        <input type="number" class="form-control" name="stock_quantity" value="' . $book['stock_quantity'] . '" min="0" required>
     </div>
     <div class="form-group">
         <label>Trạng thái</label>
