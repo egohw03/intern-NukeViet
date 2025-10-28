@@ -43,7 +43,6 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $book['publish_year'] = $nv_Request->get_int('publish_year', 'post', 0);
     $book['isbn'] = $nv_Request->get_title('isbn', 'post', '');
     $book['description'] = $nv_Request->get_textarea('description', '', NV_ALLOWED_HTML_TAGS);
-    $book['cat_id'] = $nv_Request->get_int('cat_id', 'post', 0);
     $book['price'] = $nv_Request->get_float('price', 'post', 0);
     $book['stock_quantity'] = $nv_Request->get_int('stock_quantity', 'post', 0);
     $book['status'] = $nv_Request->get_int('status', 'post', 1);
@@ -150,8 +149,14 @@ if (!empty($book['image'])) {
 }
 
 if (!empty($errors)) {
-$xtpl->assign('ERROR', implode('<br>', $errors));
-$xtpl->parse('main.error');
+    $xtpl->assign('ERROR', implode('<br>', $errors));
+    $xtpl->parse('main.error');
+}
+
+// Assign categories to template
+foreach ($categories as $cat) {
+    $xtpl->assign('CAT', $cat);
+    $xtpl->parse('main.category');
 }
 
 $xtpl->parse('main');
