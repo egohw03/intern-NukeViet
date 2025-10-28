@@ -11,6 +11,8 @@
 if (!defined('NV_IS_MOD_BOOKMANAGER'))
     die('Stop!!!');
 
+global $module_upload;
+
 $id = $nv_Request->get_int('id', 'get', 0);
 // Debug: Uncomment to check
 // echo 'Debug: ID = ' . $id . '<br>';
@@ -29,44 +31,20 @@ $page_title = $book['title'];
 global $array_mod_title;
 $array_mod_title[] = [
 'catid' => 0,
-'title' => 'Detail',
+'title' => $lang_module['detail'],
 'link' => ''
 ];
 
+// Prepare book data for theme
+$book['image'] = !empty($book['image']) ? NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $book['image'] : '';
+$book['price_format'] = number_format($book['price'], 0, ',', '.') . ' VNĐ';
+
+$contents = nv_theme_detail($book);
+
+// Create XTemplate for related books only
 $xtpl = new XTemplate('detail.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
-$xtpl->assign('BOOK', $book);
-$xtpl->assign('BACK_LINK', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-
-if (!empty($book['image'])) {
-    $xtpl->parse('main.image');
-} else {
-    $xtpl->parse('main.no_image');
-}
-
-if (!empty($book['publisher'])) {
-    $xtpl->parse('main.publisher');
-}
-
-if (!empty($book['publish_year'])) {
-    $xtpl->parse('main.publish_year');
-}
-
-if (!empty($book['isbn'])) {
-    $xtpl->parse('main.isbn');
-}
-
-if (!empty($book['description'])) {
-    $xtpl->parse('main.description');
-}
-
-if ($book['stock_quantity'] > 0) {
-    $xtpl->assign('ADD_TO_CART_LINK', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&op=cart&action=add&id=' . $book['id']);
-    $xtpl->parse('main.in_stock');
-} else {
-    $xtpl->parse('main.out_of_stock');
-}
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
 // Related books
 $related_books = nv_get_books(6, 0);
@@ -91,10 +69,11 @@ if (!empty($related_books)) {
         $xtpl->parse('main.related_books.related_loop');
     }
     $xtpl->parse('main.related_books');
-}
 
-$xtpl->parse('main');
-$contents = $xtpl->text('main');
+    // Append related books to contents
+    $related_content = $xtpl->text('main.related_books');
+    $contents = str_replace('<!-- END: main -->', $related_content . '<!-- END: main -->', $contents);
+}
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);

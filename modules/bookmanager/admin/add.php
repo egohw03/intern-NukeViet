@@ -1,15 +1,25 @@
 <?php
 
-if (!defined('NV_IS_FILE_ADMIN')) die('Stop!!!');
+/**
+ * NukeViet Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2025 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
 
-global $module_upload, $lang_module;
+if (!defined('NV_IS_FILE_ADMIN')) {
+    die('Stop!!!');
+}
 
-use NukeViet\Files\Upload;
+global $lang_module, $lang_global, $nv_Lang, $module_upload;
 
-$page_title = isset($lang_module['add_book']) ? $lang_module['add_book'] : 'Thêm sách';
+$page_title = $nv_Lang->getModule('add_book');
 
 $errors = [];
 $book = [
+    'cat_id' => 0,
     'title' => '',
     'author' => '',
     'publisher' => '',
@@ -23,6 +33,7 @@ $book = [
 ];
 
 if ($nv_Request->isset_request('submit', 'post')) {
+    $book['cat_id'] = $nv_Request->get_int('cat_id', 'post', 0);
     $book['title'] = $nv_Request->get_title('title', 'post', '');
     $book['author'] = $nv_Request->get_title('author', 'post', '');
     $book['publisher'] = $nv_Request->get_title('publisher', 'post', '');
@@ -35,15 +46,18 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
     // Validate
     if (empty($book['title'])) {
-        $errors[] = 'Vui lòng nhập tiêu đề sách';
+        $errors[] = $nv_Lang->getModule('error_required_title');
     }
     if (empty($book['author'])) {
-        $errors[] = 'Vui lòng nhập tác giả';
+        $errors[] = $nv_Lang->getModule('error_author');
+    }
+    if (empty($book['cat_id'])) {
+        $errors[] = $nv_Lang->getModule('error_category');
     }
 
     // Upload image
     if (isset($_FILES['image']) && is_uploaded_file($_FILES['image']['tmp_name'])) {
-        $upload = new Upload($upload_info = [
+        $upload = new Upload([
             'nv_path' => NV_UPLOADS_DIR . '/' . $module_upload,
             'path' => '',
             'maxfile' => '',
@@ -62,9 +76,12 @@ if ($nv_Request->isset_request('submit', 'post')) {
     }
 
     if (empty($errors)) {
-        $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_books (title, author, publisher, publish_year, isbn, description, image, price, stock_quantity, add_time, status) VALUES (:title, :author, :publisher, :publish_year, :isbn, :description, :image, :price, :stock_quantity, :add_time, :status)';
+        $alias = change_alias($book['title']);
+        $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_books (cat_id, title, alias, author, publisher, publish_year, isbn, description, image, price, stock_quantity, add_time, status) VALUES (:cat_id, :title, :alias, :author, :publisher, :publish_year, :isbn, :description, :image, :price, :stock_quantity, :add_time, :status)';
         $stmt = $db->prepare($sql);
+        $stmt->bindParam(':cat_id', $book['cat_id'], PDO::PARAM_INT);
         $stmt->bindParam(':title', $book['title'], PDO::PARAM_STR);
+        $stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
         $stmt->bindParam(':author', $book['author'], PDO::PARAM_STR);
         $stmt->bindParam(':publisher', $book['publisher'], PDO::PARAM_STR);
         $stmt->bindParam(':publish_year', $book['publish_year'], PDO::PARAM_INT);
@@ -77,76 +94,54 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $stmt->bindParam(':status', $book['status'], PDO::PARAM_INT);
 
         if ($stmt->execute()) {
+            nv_insert_logs(NV_LANG_DATA, $module_name, 'Add book', 'ID: ' . $db->lastInsertId(), $admin_info['userid']);
+            $nv_Cache->delMod($module_name);
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
         } else {
-            $errors[] = 'Lỗi khi lưu dữ liệu';
+            $errors[] = $nv_Lang->getModule('error_save');
         }
     }
 }
 
-$contents = '<div class="panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">Thêm sách</h3>
-    </div>
-    <div class="panel-body">';
-
-if (!empty($errors)) {
-    $contents .= '<div class="alert alert-danger">';
-    foreach ($errors as $error) {
-        $contents .= '<p>' . $error . '</p>';
-    }
-    $contents .= '</div>';
+// Get categories for dropdown
+$categories = [];
+$sql = 'SELECT id, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories ORDER BY weight ASC';
+$result = $db->query($sql);
+while ($row = $result->fetch()) {
+    $categories[] = [
+    'id' => $row['id'],
+    'title' => $row['title'],
+    'selected' => ($book['cat_id'] == $row['id']) ? 'selected' : ''
+    ];
 }
 
-$contents .= '<form method="post" enctype="multipart/form-data">
-    <div class="form-group">
-        <label>Tiêu đề</label>
-        <input type="text" class="form-control" name="title" value="' . $book['title'] . '" required>
-    </div>
-    <div class="form-group">
-        <label>Tác giả</label>
-        <input type="text" class="form-control" name="author" value="' . $book['author'] . '" required>
-    </div>
-    <div class="form-group">
-        <label>Nhà xuất bản</label>
-        <input type="text" class="form-control" name="publisher" value="' . $book['publisher'] . '">
-    </div>
-    <div class="form-group">
-        <label>Năm xuất bản</label>
-        <input type="number" class="form-control" name="publish_year" value="' . $book['publish_year'] . '">
-    </div>
-    <div class="form-group">
-        <label>ISBN</label>
-        <input type="text" class="form-control" name="isbn" value="' . $book['isbn'] . '">
-    </div>
-    <div class="form-group">
-        <label>Mô tả</label>
-        <textarea class="form-control" name="description" rows="5">' . $book['description'] . '</textarea>
-    </div>
-    <div class="form-group">
-    <label>Hình ảnh</label>
-    <input type="file" class="form-control" name="image" accept="image/*">
-    </div>
-    <div class="form-group">
-    <label>Giá bán (VNĐ)</label>
-    <input type="number" class="form-control" name="price" value="' . $book['price'] . '" step="0.01" min="0" required>
-    </div>
-    <div class="form-group">
-    <label>Số lượng tồn kho</label>
-        <input type="number" class="form-control" name="stock_quantity" value="' . $book['stock_quantity'] . '" min="0" required>
-    </div>
-    <div class="form-group">
-        <label>Trạng thái</label>
-        <select class="form-control" name="status">
-            <option value="1" ' . ($book['status'] == 1 ? 'selected' : '') . '>Hoạt động</option>
-            <option value="0" ' . ($book['status'] == 0 ? 'selected' : '') . '>Không hoạt động</option>
-        </select>
-    </div>
-    <button type="submit" name="submit" class="btn btn-primary">Lưu</button>
-    <a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '" class="btn btn-default">Hủy</a>
-</form>
-    </div>
-</div>';
+// Use XTemplate instead of string concatenation
+$xtpl = new XTemplate('add.tpl', NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/modules/' . $module_file);
+$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('DATA', $book);
+$xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
+$xtpl->assign('BACK_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
+$xtpl->assign('CURRENT_YEAR', date('Y'));
+
+if ($book['status'] == 1) {
+    $xtpl->assign('DATA.status_1_selected', 'selected');
+} else {
+    $xtpl->assign('DATA.status_0_selected', 'selected');
+}
+
+foreach ($categories as $cat) {
+    $xtpl->assign('CAT', $cat);
+    $xtpl->parse('main.category');
+}
+
+if (!empty($errors)) {
+    $xtpl->assign('ERROR', implode('<br>', $errors));
+    $xtpl->parse('main.error');
+}
+
+$xtpl->parse('main');
+$contents = $xtpl->text('main');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

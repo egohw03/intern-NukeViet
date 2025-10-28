@@ -1,131 +1,110 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2009-2025 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Oct 19, 2025
+ * NukeViet Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2025 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (!defined('NV_IS_FILE_ADMIN'))
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
-
-global $module_name, $module_data, $nv_Lang, $lang_global, $lang_module;
-
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
-$page_title = isset($lang_module['main']) ? $lang_module['main'] : 'Quản lý sách';
-
-// Debug
-if (empty($lang_global)) {
-    $lang_global = [
-        'id' => 'ID',
-        'add_time' => 'Thời gian thêm',
-        'funcs' => 'Chức năng'
-    ];
 }
 
-if (empty($lang_module)) {
-    $lang_module = [
-        'book_list' => 'Danh sách sách',
-        'add_book' => 'Thêm sách',
-        'title' => 'Tiêu đề',
-        'author' => 'Tác giả',
-        'publisher' => 'Nhà xuất bản',
-        'publish_year' => 'Năm xuất bản',
-        'isbn' => 'ISBN',
-        'status' => 'Trạng thái',
-        'edit' => 'Sửa',
-        'delete' => 'Xóa',
-        'no_books' => 'Không có sách nào'
-    ];
+global $lang_module, $lang_global, $nv_Lang;
+
+$page_title = $nv_Lang->getModule('main');
+
+// Filter by category
+$cat_id = $nv_Request->get_int('cat_id', 'get', 0);
+
+// Sort
+$sort_by = $nv_Request->get_string('sort', 'get', 'add_time');
+$sort_order = $nv_Request->get_string('order', 'get', 'desc');
+
+$valid_sort = ['title', 'author', 'price', 'add_time', 'status'];
+if (!in_array($sort_by, $valid_sort)) {
+    $sort_by = 'add_time';
+}
+if ($sort_order !== 'asc') {
+    $sort_order = 'desc';
 }
 
-$books = nv_get_books(100, 0, false); // Lấy tất cả sách, bao gồm không hoạt động
+// Get books with category information
+$where = '';
+if ($cat_id > 0) {
+    $where = 'WHERE b.cat_id = ' . $cat_id;
+}
 
-// Xử lý dữ liệu sách cho template
+$sql = 'SELECT b.*, c.title as cat_title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_books b
+LEFT JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_categories c ON b.cat_id = c.id
+' . $where . '
+ORDER BY b.' . $sort_by . ' ' . strtoupper($sort_order);
+$result = $db->query($sql);
+
 $processed_books = [];
-foreach ($books as $book) {
-    $book['status_class'] = $book['status'] ? 'success' : 'danger';
-    $book['status_text'] = $book['status'] ? $nv_Lang->getModule('active') : $nv_Lang->getModule('inactive');
-    $book['add_time'] = nv_datetime_format($book['add_time']);
-    $book['edit_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=edit&id=' . $book['id'];
-    $book['delete_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=delete&id=' . $book['id'];
-    $processed_books[] = $book;
+while ($book = $result->fetch()) {
+$book['status_class'] = $book['status'] ? 'success' : 'danger';
+$book['status_text'] = $book['status'] ? $nv_Lang->getModule('active') : $nv_Lang->getModule('inactive');
+$book['add_time'] = nv_date('d/m/Y H:i', $book['add_time']);
+$book['price_format'] = number_format($book['price'], 0, ',', '.') . ' VNĐ';
+$book['edit_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=edit&id=' . $book['id'];
+$book['delete_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=delete&id=' . $book['id'];
+$processed_books[] = $book;
 }
 
-$contents = '<div class="panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">' . $lang_module['book_list'] . '</h3>
-        <div class="pull-right">
-            <a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=add" class="btn btn-primary btn-sm">
-                <i class="fa fa-plus"></i> ' . $lang_module['add_book'] . '
-            </a>
-        </div>
-        <div class="clearfix"></div>
-    </div>
-    <div class="panel-body">
-        <div class="table-responsive">
-            <table class="table table-striped table-bordered table-hover">
-                <thead>
-                    <tr>
-                        <th class="text-center">' . $lang_global['id'] . '</th>
-                        <th style="width: 25%;">' . $lang_module['title'] . '</th>
-                        <th>' . $lang_module['author'] . '</th>
-                        <th>' . $lang_module['publisher'] . '</th>
-                        <th>' . $lang_module['publish_year'] . '</th>
-                        <th>' . $lang_module['isbn'] . '</th>
-                        <th class="text-center">' . $lang_module['status'] . '</th>
-                        <th class="text-center">Giá bán</th>
-                        <th class="text-center">Tồn kho</th>
-                         <th class="text-center">' . $lang_global['add_time'] . '</th>
-                         <th class="text-center">' . $lang_global['funcs'] . '</th>
-                    </tr>
-                </thead>
-                <tbody>';
+// Get categories for filter
+$categories = [];
+$sql_cat = 'SELECT id, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories ORDER BY weight ASC';
+$result_cat = $db->query($sql_cat);
+while ($row = $result_cat->fetch()) {
+    $categories[] = $row;
+}
+
+// Use XTemplate instead of string concatenation
+$xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/modules/' . $module_file);
+$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
+$xtpl->assign('NV_LANG_VARIABLE', NV_LANG_VARIABLE);
+$xtpl->assign('NV_LANG_DATA', NV_LANG_DATA);
+$xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
+$xtpl->assign('MODULE_NAME', $module_name);
+$xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
+$xtpl->assign('CAT_ID', $cat_id);
+$xtpl->assign('SORT_BY', $sort_by);
+$xtpl->assign('SORT_ORDER', $sort_order_toggle);
+
+// Filter categories
+foreach ($categories as $cat) {
+    $cat['selected'] = ($cat['id'] == $cat_id) ? 'selected' : '';
+    $xtpl->assign('CAT', $cat);
+    $xtpl->parse('main.cat_filter');
+}
+
+// Sort parameters for template
+$sort_order_toggle = ($sort_order == 'desc') ? 'asc' : 'desc';
 
 if (!empty($processed_books)) {
-    foreach ($processed_books as $book) {
-        $contents .= '<tr>
-                        <td class="text-center">' . $book['id'] . '</td>
-                        <td style="width: 25%;">
-                            <strong>' . $book['title'] . '</strong>
-                        </td>
-                        <td>' . $book['author'] . '</td>
-                        <td>' . $book['publisher'] . '</td>
-                        <td class="text-center">' . $book['publish_year'] . '</td>
-                        <td>' . $book['isbn'] . '</td>
-                        <td class="text-center">' . number_format($book['price'], 0, ',', '.') . ' VNĐ</td>
-                        <td class="text-center">' . $book['stock_quantity'] . '</td>
-                        <td class="text-center">
-                            <span class="label label-' . $book['status_class'] . '">' . $book['status_text'] . '</span>
-                         </td>
-                         <td class="text-center">' . $book['add_time'] . '</td>
-                        <td class="text-center">
-                            <a href="' . $book['edit_link'] . '" class="btn btn-info btn-xs">
-                                <i class="fa fa-edit"></i> ' . $lang_module['edit'] . '
-                            </a>
-                            <a href="' . $book['delete_link'] . '" class="btn btn-danger btn-xs" onclick="return confirm(nv_is_del_confirm[0]);">
-                                <i class="fa fa-trash"></i> ' . $lang_module['delete'] . '
-                            </a>
-                        </td>
-                    </tr>';
+foreach ($processed_books as $book) {
+    $xtpl->assign('BOOK', $book);
+
+    if (!empty($book['cat_title'])) {
+        $xtpl->parse('main.book_loop.cat_title');
+    } else {
+        $xtpl->parse('main.book_loop.no_cat_title');
     }
+
+    $xtpl->parse('main.book_loop');
+}
 } else {
-    $contents .= '<tr>
-    <td colspan="11" class="text-center">
-                            <em>' . $lang_module['no_books'] . '</em>
-                        </td>
-                    </tr>';
+$xtpl->parse('main.no_books');
 }
 
-$contents .= '                </tbody>
-            </table>
-        </div>
-    </div>
-</div>';
+$xtpl->parse('main');
+$contents = $xtpl->text('main');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

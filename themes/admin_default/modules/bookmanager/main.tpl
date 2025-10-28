@@ -1,65 +1,76 @@
 <!-- BEGIN: main -->
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h3 class="panel-title">{LANG['book_list']}</h3>
+        <h3 class="panel-title">{LANG.book_list}</h3>
         <div class="pull-right">
-            <a href="{ADD_LINK}" class="btn btn-primary btn-sm">
-                <i class="fa fa-plus"></i> {LANG['add_book']}
+            <a href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}=add" class="btn btn-primary btn-sm">
+                <i class="fa fa-plus"></i> {LANG.add_book}
             </a>
         </div>
         <div class="clearfix"></div>
+    </div>
+
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>{LANG.category}:</label>
+                    <select class="form-control" onchange="window.location.href=this.value">
+                        <option value="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}&amp;sort={SORT_BY}&amp;order={SORT_ORDER}">{LANG.all_books}</option>
+                        <!-- BEGIN: cat_filter -->
+                        <option value="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}&amp;cat_id={CAT.id}&amp;sort={SORT_BY}&amp;order={SORT_ORDER}" {CAT.selected}>{CAT.title}</option>
+                        <!-- END: cat_filter -->
+                    </select>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="panel-body">
         <div class="table-responsive">
             <table class="table table-striped table-bordered table-hover">
                 <thead>
                     <tr>
-                        <th class="text-center">{GLANG['id']}</th>
-                        <th>{LANG['title']}</th>
-                        <th>{LANG['author']}</th>
-                        <th>{LANG['publisher']}</th>
-                        <th>{LANG['publish_year']}</th>
-                        <th>{LANG['isbn']}</th>
-                        <th class="text-center">{LANG['status']}</th>
-                        <th class="text-center">{GLANG['add_time']}</th>
-                        <th class="text-center">{GLANG['funcs']}</th>
+                        <th class="text-center">{LANG.id}</th>
+                        <th><a href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}&amp;cat_id={CAT_ID}&amp;sort=title&amp;order={SORT_ORDER}" class="sort-link">Title</a></th>
+                        <th><a href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}&amp;cat_id={CAT_ID}&amp;sort=author&amp;order={SORT_ORDER}" class="sort-link">Author</a></th>
+                        <th><a href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}&amp;cat_id={CAT_ID}&amp;sort=price&amp;order={SORT_ORDER}" class="sort-link">Price</a></th>
+                        <th><a href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}&amp;cat_id={CAT_ID}&amp;sort=add_time&amp;order={SORT_ORDER}" class="sort-link">Add Time</a></th>
+                        <th><a href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}&amp;cat_id={CAT_ID}&amp;sort=status&amp;order={SORT_ORDER}" class="sort-link">Status</a></th>
+                        <th class="text-center">{LANG.functions}</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- BEGIN: BOOKS -->
+                    <!-- BEGIN: book_loop -->
                     <tr>
-                        <td class="text-center">{BOOKS.id}</td>
-                        <td>
-                            <strong>{BOOKS.title}</strong>
-                        </td>
-                        <td>{BOOKS.author}</td>
-                        <td>{BOOKS.publisher}</td>
-                        <td class="text-center">{BOOKS.publish_year}</td>
-                        <td>{BOOKS.isbn}</td>
-                        <td class="text-center">
-                            <span class="label label-{BOOKS.status_class}">{BOOKS.status_text}</span>
-                        </td>
-                        <td class="text-center">{BOOKS.add_time}</td>
-                        <td class="text-center">
-                            <a href="{BOOKS.edit_link}" class="btn btn-info btn-xs">
-                                <i class="fa fa-edit"></i> {LANG['edit']}
-                            </a>
-                            <a href="{BOOKS.delete_link}" class="btn btn-danger btn-xs" onclick="return confirm(nv_is_del_confirm[0]);">
-                                <i class="fa fa-trash"></i> {LANG['delete']}
-                            </a>
-                        </td>
+                    <td class="text-center">{BOOK.id}</td>
+                    <td><strong>{BOOK.title}</strong></td>
+                    <td>{BOOK.author}</td>
+                    <td class="text-right">{BOOK.price_format}</td>
+                    <td class="text-center">
+                        <span class="label label-{BOOK.status_class}">{BOOK.status_text}</span>
+                    </td>
+                    <td>{BOOK.add_time}</td>
+                    <td class="text-center">
+                        <a href="{BOOK.edit_link}" class="btn btn-info btn-xs" title="{LANG.edit}">
+                    <i class="fa fa-edit"></i>
+                        </a>
+                        <a href="{BOOK.delete_link}" class="btn btn-danger btn-xs" title="{LANG.delete}" onclick="return confirm(nv_is_del_confirm[0]);">
+                            <i class="fa fa-trash"></i>
+                    </a>
+                    </td>
                     </tr>
-                    <!-- END: BOOKS -->
-                    <!-- BEGIN: NO_BOOKS -->
-                    <tr>
-                        <td colspan="9" class="text-center">
-                            <em>{LANG['no_books']}</em>
-                        </td>
-                    </tr>
-                    <!-- END: NO_BOOKS -->
+                    <!-- END: book_loop -->
                 </tbody>
             </table>
         </div>
+
+        <!-- BEGIN: no_books -->
+        <div class="alert alert-info text-center">
+            <i class="fa fa-info-circle fa-2x"></i>
+            <br>
+            {LANG.no_books}
+        </div>
+        <!-- END: no_books -->
     </div>
 </div>
 <!-- END: main -->

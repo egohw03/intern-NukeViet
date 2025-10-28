@@ -1,0 +1,92 @@
+# NukeViet 5 Module Development Rules
+
+## Module Structure
+- Modules must be placed in the `modules/` directory.
+- Module names can only contain letters, numbers, and hyphens.
+- Required directory structure:
+  - admin/
+  - blocks/
+  - funcs/
+  - language/
+  - mobile/ (optional)
+  - Shared/ (optional)
+  - Log/ (optional)
+  - widgets/ (optional)
+
+## Required Files
+- version.php: Declares module metadata, functions, version, author, upload directories.
+- admin.functions.php: Contains functions and constants used in admin.
+- admin.menu.php: Contains submenu and allow_func arrays.
+- functions.php: Contains functions and constants for site frontend.
+- funcs/main.php: Main function for site frontend.
+- admin/main.php: Main function for admin area.
+- action_mysql.php: Database setup for MySQL.
+- theme.php: Theme functions for frontend display.
+
+## Security Checks
+- All PHP files must start with security checks:
+  - For admin files: `if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) die('Stop!!!');`
+  - For module files: `if (!defined('NV_SYSTEM')) die('Stop!!!');`
+  - For admin functions: `if (!defined('NV_IS_MODADMIN')) die('Stop!!!');`
+
+## Constants
+- Define module-specific constants like `NV_IS_MOD_{MODULENAME}` or `NV_IS_{MODULENAME}_ADMIN`.
+- Use NukeViet's predefined constants appropriately.
+
+## Version Naming
+- Follow format: X.Y.ZZ where:
+  - X: Major version (1 digit)
+  - Y: Minor version (1 digit)
+  - ZZ: Patch version (2 digits, zero-padded)
+
+## Database
+- Use `action_mysql.php` for database setup.
+- Avoid MySQL reserved keywords in table/column names.
+- Use proper table prefixes: `{$db_config['prefix']}_{$lang}_{$module_data}_tablename`
+
+## Templates
+- Use XTemplate for all HTML output.
+- Separate PHP logic from HTML completely.
+- Template files go in `themes/{theme_name}/modules/{module_name}/`
+- Use .tpl extension for templates.
+
+## Functions
+- Frontend functions should be in `theme.php` for better theme compatibility.
+- Function names should be prefixed appropriately.
+- Use `nv_site_theme()` or `nv_admin_theme()` to output content.
+
+## Language Files
+- Admin language: `language/admin_{lang}.php`
+- Site language: `language/{lang}.php`
+- Use `$lang_module` array for translations.
+- Include translator information.
+
+## Coding Standards
+- Use proper indentation and formatting.
+- Comment code appropriately.
+- Follow PHP best practices.
+- Avoid inline HTML in PHP files.
+
+## Additional Features
+- For RSS: Implement `rssdata.php` and `funcs/rss.php`
+- For search: Implement `search.php` and `funcs/search.php`
+- For notifications: Implement `notification.php`
+- For comments: Implement `comment.php`
+- For sitemap: Implement appropriate sitemap functions
+
+## Form Handling
+- Use proper input validation and sanitization.
+- Follow NukeViet's form submission guidelines.
+
+## Email Templates
+- Use NukeViet's email template system when sending emails.
+
+## Block Positions
+- Support customizable block positions if needed.
+
+## File Management
+- Use NukeViet's file manager for file uploads/selections.
+
+## Testing
+- Ensure all functions are properly tested.
+- Validate inputs and outputs.

@@ -22,7 +22,7 @@
         <form method="post" action="{FORM_ACTION}">
             <div class="text-center">
                 <input type="hidden" name="confirm" value="1">
-                <button type="submit" class="btn btn-danger">{GLANG.delete}</button>
+                <button type="submit" class="btn btn-danger">{LANG.delete}</button>
                 <a href="{CANCEL_LINK}" class="btn btn-default">{LANG.cancel}</a>
             </div>
         </form>

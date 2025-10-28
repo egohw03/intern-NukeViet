@@ -25,15 +25,16 @@
                 </a>
                 <!-- END: no_image -->
                 <div class="card-body" style="display: flex; flex-direction: column; height: 100%; justify-content: space-between; align-items: center;">
-                    <div>
-                        <h6 class="card-title text-center">
-                    <a href="{BOOK.link}" class="text-decoration-none text-dark">{BOOK.title}</a>
-                    </h6>
-                        <p class="text-center text-muted small">{BOOK.author}</p>
+                <div>
+                <h6 class="card-title text-center">
+                <a href="{BOOK.link}" class="text-decoration-none text-dark">{BOOK.title}</a>
+                </h6>
+                <p class="text-center text-muted small">{BOOK.author}</p>
+                        <p class="text-center text-primary font-weight-bold">{BOOK.price_format}</p>
                 </div>
                 <div>
-                        <a href="{BOOK.link}" class="btn btn-primary btn-sm w-100">
-                            <i class="fa fa-eye"></i> {LANG.view}
+                <a href="{BOOK.link}" class="btn btn-primary btn-sm w-100">
+                    <i class="fa fa-eye"></i> {LANG.view}
                         </a>
                 </div>
                 </div>

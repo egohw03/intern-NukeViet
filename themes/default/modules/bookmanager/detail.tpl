@@ -36,12 +36,12 @@
                         <td>{BOOK.author}</td>
                         </tr>
                         <tr>
-                            <td><strong>Giá bán:</strong></td>
-                            <td>{BOOK.price} VNĐ</td>
+                        <td><strong>{LANG.price}:</strong></td>
+                        <td class="text-primary font-weight-bold">{BOOK.price_format}</td>
                         </tr>
                         <tr>
-                            <td><strong>Tồn kho:</strong></td>
-                            <td>{BOOK.stock_quantity}</td>
+                        <td><strong>{LANG.stock_quantity}:</strong></td>
+                        <td>{BOOK.stock_quantity}</td>
                         </tr>
                         <!-- BEGIN: publisher -->
                         <tr>
