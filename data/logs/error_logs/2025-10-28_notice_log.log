@@ -11,3 +11,29 @@
     "agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0"
 }
 -------------------
+{
+    "time": "Tue, 28 Oct 2025 20:38:44 +0100",
+    "server": "localhost",
+    "ip": "::1",
+    "errno": "1024 (User Notice)",
+    "errstr": "Template file not found: main_ajax.tpl, module: bookmanager",
+    "file": "/includes/core/filesystem_functions.php",
+    "line": 1239,
+    "request": "/nukeviet-nukeviet5.0/vi/bookmanager/?page=3",
+    "method": "GET",
+    "agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0"
+}
+-------------------
+{
+    "time": "Tue, 28 Oct 2025 20:49:29 +0100",
+    "server": "localhost",
+    "ip": "::1",
+    "errno": "1024 (User Notice)",
+    "errstr": "PDOException Object\n(\n    &lbrack;message:protected&rbrack; => SQLSTATE&lbrack;42S01&rbrack;: Base table or view already exists: 1050 Table 'nv5_vi_bookmanager_cart' already exists\n    &lbrack;string:Exception:private&rbrack; => \n    &lbrack;code:protected&rbrack; => 42S01\n    &lbrack;file:protected&rbrack; => /includes/vendor/vinades/nukeviet/Core/Database.php\n    &lbrack;line:protected&rbrack; => 544\n    &lbrack;trace:Exception:private&rbrack; => Array\n        (\n            &lbrack;0&rbrack; => Array\n                (\n                    &lbrack;file&rbrack; => /includes/vendor/vinades/nukeviet/Core/Database.php\n                    &lbrack;line&rbrack; => 544\n                    &lbrack;function&rbrack; => query\n                    &lbrack;class&rbrack; => PDO\n                    &lbrack;type&rbrack; => ->\n                    &lbrack;args&rbrack; => Array\n                        (\n                            &lbrack;0&rbrack; => CREATE TABLE nv5_vi_bookmanager_cart (\nid INT(11) NOT NULL AUTO_INCREMENT,\nuserid INT(11) NOT NULL,\nbook_id INT(11) NOT NULL,\nquantity INT(11) NOT NULL,\nadd_time INT(11) NOT NULL,\nPRIMARY KEY (id),\nKEY idx_userid (userid),\nKEY idx_book_id (book_id)\n) ENGINE=MyISAM DEFAULT CHARSET=utf8\n                            &lbrack;1&rbrack; => \n                        )\n\n                )\n\n            &lbrack;1&rbrack; => Array\n                (\n                    &lbrack;file&rbrack; => /admin/modules/functions.php\n                    &lbrack;line&rbrack; => 196\n                    &lbrack;function&rbrack; => query\n                    &lbrack;class&rbrack; => NukeViet/Core/Database\n                    &lbrack;type&rbrack; => ->\n                    &lbrack;args&rbrack; => Array\n                        (\n                            &lbrack;0&rbrack; => CREATE TABLE nv5_vi_bookmanager_cart (\nid INT(11) NOT NULL AUTO_INCREMENT,\nuserid INT(11) NOT NULL,\nbook_id INT(11) NOT NULL,\nquantity INT(11) NOT NULL,\nadd_time INT(11) NOT NULL,\nPRIMARY KEY (id),\nKEY idx_userid (userid),\nKEY idx_book_id (book_id)\n) ENGINE=MyISAM DEFAULT CHARSET=utf8\n                        )\n\n                )\n\n            &lbrack;2&rbrack; => Array\n                (\n                    &lbrack;file&rbrack; => /admin/modules/recreate_mod.php\n                    &lbrack;line&rbrack; => 24\n                    &lbrack;function&rbrack; => nv_setup_data_module\n                    &lbrack;args&rbrack; => Array\n                        (\n                            &lbrack;0&rbrack; => vi\n                            &lbrack;1&rbrack; => bookmanager\n                            &lbrack;2&rbrack; => 0\n                        )\n\n                )\n\n            &lbrack;3&rbrack; => Array\n                (\n                    &lbrack;file&rbrack; => /admin/index.php\n                    &lbrack;line&rbrack; => 170\n                    &lbrack;args&rbrack; => Array\n                        (\n                            &lbrack;0&rbrack; => /admin/modules/recreate_mod.php\n                        )\n\n                    &lbrack;function&rbrack; => require\n                )\n\n        )\n\n    &lbrack;previous:Exception:private&rbrack; => \n    &lbrack;errorInfo&rbrack; => Array\n        (\n            &lbrack;0&rbrack; => 42S01\n            &lbrack;1&rbrack; => 1050\n            &lbrack;2&rbrack; => Table 'nv5_vi_bookmanager_cart' already exists\n        )\n\n)\n",
+    "file": "/admin/modules/functions.php",
+    "line": 198,
+    "request": "/nukeviet-nukeviet5.0/admin/index.php?language=vi&nv=modules&op=recreate_mod",
+    "method": "POST",
+    "agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0"
+}
+-------------------

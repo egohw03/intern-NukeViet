@@ -44,21 +44,12 @@
 
     <!-- Main Content -->
     <section class="main-content py-5">
-    <!-- BEGIN: full_size -->
-    <div class="container-fluid">
-    <div class="row g-0">
-    <!-- Full Size Layout - No Sidebar -->
-    <div class="col-12">
-    <div class="books-container-full p-4">
-        <!-- END: full_size -->
-        <!-- BEGIN: normal -->
         <div class="container-fluid">
             <div class="row g-0">
                 <!-- Sidebar -->
                 <div class="col-lg-3 col-xl-2">
                     <div class="sidebar-wrapper h-100">
                         <div class="sidebar-content p-4">
-        <!-- END: normal -->
                             <h5 class="mb-4 fw-light">Bộ lọc & Sắp xếp</h5>
 
                             <!-- Sort Options -->
@@ -116,15 +107,12 @@
                                 <p class="text-muted small mb-0">Khám phá và chọn sách yêu thích của bạn</p>
                             </div>
                             <div class="view-options">
-                            <button class="btn btn-outline-secondary btn-sm me-2" onclick="toggleView('grid')" id="grid-view">
-                            <i class="fas fa-th"></i>
-                            </button>
-                            <button class="btn btn-outline-secondary btn-sm me-2" onclick="toggleView('list')" id="list-view">
-                            <i class="fas fa-list"></i>
-                            </button>
-                                <a href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}<!-- BEGIN: cat_link -->&cat_id={CAT_ID}<!-- END: cat_link --><!-- BEGIN: not_full_size -->&full_size=1<!-- END: not_full_size -->" class="btn btn-outline-primary btn-sm">
-                                    <i class="fas fa-expand"></i> <!-- BEGIN: full_size -->Thu gọn<!-- END: full_size --><!-- BEGIN: normal_size -->Mở rộng<!-- END: normal_size -->
-                                </a>
+                                <button class="btn btn-outline-secondary btn-sm me-2" onclick="toggleView('grid')" id="grid-view">
+                                    <i class="fas fa-th"></i>
+                                </button>
+                                <button class="btn btn-outline-secondary btn-sm" onclick="toggleView('list')" id="list-view">
+                                    <i class="fas fa-list"></i>
+                                </button>
                             </div>
                         </div>
 
@@ -276,8 +264,6 @@
                 </div>
             </div>
         </div>
-        <!-- END: normal -->
-        <!-- END: full_size -->
     </section>
 </div>
 

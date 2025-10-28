@@ -1,193 +1,216 @@
 <!-- BEGIN: main -->
-<div class="book-detail">
-    <div class="page-header">
-        <div class="pull-right">
-            <a href="{BACK_LINK}" class="btn btn-default">
-                <i class="fa fa-arrow-left"></i> {GLANG.back}
-            </a>
-        </div>
-        <h1>{BOOK.title}</h1>
-        <div class="clearfix"></div>
-    </div>
-    
-    <div class="row">
-        <div class="col-md-4">
-            <div class="book-cover">
-                <!-- BEGIN: image -->
-                <img src="{BOOK.image}" alt="{BOOK.title}" class="img-responsive img-thumbnail center-block">
-                <!-- END: image -->
-                <!-- BEGIN: no_image -->
-                <div class="no-image-placeholder text-center">
-                    <i class="fa fa-book fa-5x"></i>
-                    <br>
-                    <small>{GLANG.no_image}</small>
-                </div>
-                <!-- END: no_image -->
-            </div>
-        </div>
-        <div class="col-md-8">
-            <div class="book-info">
-                <h2 class="book-title">{BOOK.title}</h2>
-                
-                <div class="book-meta">
-                    <table class="table table-striped">
-                        <tr>
-                        <td width="120"><strong>{LANG.author}:</strong></td>
-                        <td>{BOOK.author}</td>
-                        </tr>
-                        <tr>
-                        <td><strong>{LANG.price}:</strong></td>
-                        <td class="text-primary font-weight-bold">{BOOK.price_format}</td>
-                        </tr>
-                        <tr>
-                        <td><strong>{LANG.stock_quantity}:</strong></td>
-                        <td>{BOOK.stock_quantity}</td>
-                        </tr>
-                        <!-- BEGIN: publisher -->
-                        <tr>
-                            <td><strong>{LANG.publisher}:</strong></td>
-                            <td>{BOOK.publisher}</td>
-                        </tr>
-                        <!-- END: publisher -->
-                        <!-- BEGIN: publish_year -->
-                        <tr>
-                            <td><strong>{LANG.publish_year}:</strong></td>
-                            <td>{BOOK.publish_year}</td>
-                        </tr>
-                        <!-- END: publish_year -->
-                        <!-- BEGIN: isbn -->
-                        <tr>
-                            <td><strong>{LANG.isbn}:</strong></td>
-                            <td>{BOOK.isbn}</td>
-                        </tr>
-                        <!-- END: isbn -->
-                    </table>
-                </div>
-                
-                <!-- BEGIN: description -->
-                <div class="book-description">
-                <h4>{LANG.description}</h4>
-                <div class="well">
-                {BOOK.description}
-                </div>
-                </div>
-                <!-- END: description -->
-                <div class="book-actions" style="margin-top: 20px;">
-                    <!-- BEGIN: in_stock -->
-                    <a href="{ADD_TO_CART_LINK}" class="btn btn-success btn-lg">Thêm vào giỏ hàng</a>
-                    <!-- END: in_stock -->
-                    <!-- BEGIN: out_of_stock -->
-                    <button class="btn btn-secondary btn-lg" disabled>Hết hàng</button>
-                    <!-- END: out_of_stock -->
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- BEGIN: related_books -->
-    <div class="related-books">
-        <h3>{LANG.related_books}</h3>
+<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/default/css/bookmanager.css">
+<div class="book-detail-page py-5">
+    <div class="container">
         <div class="row">
-            <!-- BEGIN: related_loop -->
-            <div class="col-md-3 col-sm-6">
-                <div class="related-book-item">
-                    <div class="book-cover-small">
+            <!-- Book Images -->
+            <div class="col-lg-5 mb-4">
+                <div class="book-images">
+                    <div class="main-image mb-3">
                         <!-- BEGIN: image -->
-                        <a href="{RELATED_BOOK.link}">
-                            <img src="{RELATED_BOOK.image}" alt="{RELATED_BOOK.title}" class="img-responsive img-thumbnail">
-                        </a>
+                        <img src="{BOOK.image_url}" alt="{BOOK.title}" class="img-fluid rounded shadow" id="main-book-image">
                         <!-- END: image -->
                         <!-- BEGIN: no_image -->
-                        <a href="{RELATED_BOOK.link}">
-                            <div class="no-image-placeholder-small">
-                                <i class="fa fa-book fa-2x"></i>
-                            </div>
-                        </a>
+                        <div class="d-flex align-items-center justify-content-center bg-light rounded shadow" style="height: 400px;">
+                            <i class="fas fa-book fa-5x text-muted"></i>
+                        </div>
                         <!-- END: no_image -->
-                    </div>
-                    <div class="book-title-small">
-                        <a href="{RELATED_BOOK.link}" title="{RELATED_BOOK.title}">
-                            {RELATED_BOOK.title}
-                        </a>
-                    </div>
-                    <div class="book-author-small">
-                        {RELATED_BOOK.author}
                     </div>
                 </div>
             </div>
-            <!-- END: related_loop -->
+
+            <!-- Book Info -->
+            <div class="col-lg-7">
+                <div class="book-info">
+                    <nav aria-label="breadcrumb" class="mb-3">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}">{LANG.books}</a></li>
+                            <li class="breadcrumb-item"><a href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&cat_id={BOOK.cat_id}">{BOOK.category}</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">{BOOK.title}</li>
+                        </ol>
+                    </nav>
+
+                    <h1 class="book-title mb-3">{BOOK.title}</h1>
+
+                    <div class="book-meta mb-4">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <p class="mb-2"><strong>{LANG.author}:</strong> {BOOK.author}</p>
+                                <p class="mb-2"><strong>{LANG.category}:</strong> {BOOK.category}</p>
+                                <!-- BEGIN: publisher -->
+                                <p class="mb-2"><strong>{LANG.publisher}:</strong> {BOOK.publisher}</p>
+                                <!-- END: publisher -->
+                            </div>
+                            <div class="col-sm-6">
+                                <!-- BEGIN: publish_year -->
+                                <p class="mb-2"><strong>{LANG.publish_year}:</strong> {BOOK.publish_year}</p>
+                                <!-- END: publish_year -->
+                                <!-- BEGIN: isbn -->
+                                <p class="mb-2"><strong>ISBN:</strong> {BOOK.isbn}</p>
+                                <!-- END: isbn -->
+                                <p class="mb-2"><strong>{LANG.stock_quantity}:</strong>
+                                    <!-- BEGIN: in_stock -->
+                                    <span class="badge bg-success">{LANG.in_stock} ({BOOK.stock_quantity})</span>
+                                    <!-- END: in_stock -->
+                                    <!-- BEGIN: out_of_stock -->
+                                    <span class="badge bg-danger">{LANG.out_of_stock}</span>
+                                    <!-- END: out_of_stock -->
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="book-price mb-4">
+                        <h3 class="text-primary mb-0">{BOOK.price_format}</h3>
+                    </div>
+
+                    <!-- Add to Cart Form -->
+                    <!-- BEGIN: add_to_cart -->
+                    <form method="post" action="{BOOK.link}" class="add-to-cart-form mb-4">
+                        <div class="row align-items-end">
+                            <div class="col-sm-3">
+                                <label for="quantity" class="form-label">{LANG.quantity}</label>
+                                <input type="number" name="quantity" id="quantity" value="1" min="1" max="{BOOK.stock_quantity}" class="form-control">
+                            </div>
+                            <div class="col-sm-9">
+                                <button type="submit" name="add_to_cart" value="1" class="btn btn-primary btn-lg me-2">
+                                    <i class="fas fa-cart-plus me-2"></i>{LANG.add_to_cart}
+                                </button>
+                                <a href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=cart" class="btn btn-outline-primary btn-lg">
+                                    <i class="fas fa-shopping-cart me-2"></i>{LANG.cart}
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- END: add_to_cart -->
+
+                    <!-- Login Required -->
+                    <!-- BEGIN: login_required -->
+                    <div class="alert alert-warning">
+                        <i class="fas fa-info-circle me-2"></i>{LANG.login_required}
+                        <a href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}=users" class="btn btn-primary btn-sm ms-2">{GLANG.login}</a>
+                    </div>
+                    <!-- END: login_required -->
+                </div>
+            </div>
         </div>
+
+        <!-- Tabs Section -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <ul class="nav nav-tabs" id="bookTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab" aria-controls="description" aria-selected="true">{LANG.description}</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="details-tab" data-bs-toggle="tab" data-bs-target="#details" type="button" role="tab" aria-controls="details" aria-selected="false">Chi tiết sách</button>
+                    </li>
+                </ul>
+                <div class="tab-content mt-3" id="bookTabsContent">
+                    <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
+                        <!-- BEGIN: description -->
+                        <div class="book-description">
+                            {BOOK.description}
+                        </div>
+                        <!-- END: description -->
+                        <!-- BEGIN: no_description -->
+                        <p class="text-muted">Chưa có mô tả cho cuốn sách này.</p>
+                        <!-- END: no_description -->
+                    </div>
+                    <div class="tab-pane fade" id="details" role="tabpanel" aria-labelledby="details-tab">
+                        <div class="book-details">
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Tên sách</strong></td>
+                                        <td>{BOOK.title}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Tác giả</strong></td>
+                                        <td>{BOOK.author}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Thể loại</strong></td>
+                                        <td>{BOOK.category}</td>
+                                    </tr>
+                                    <!-- BEGIN: publisher_row -->
+                                    <tr>
+                                        <td><strong>Nhà xuất bản</strong></td>
+                                        <td>{BOOK.publisher}</td>
+                                    </tr>
+                                    <!-- END: publisher_row -->
+                                    <!-- BEGIN: publish_year_row -->
+                                    <tr>
+                                        <td><strong>Năm xuất bản</strong></td>
+                                        <td>{BOOK.publish_year}</td>
+                                    </tr>
+                                    <!-- END: publish_year_row -->
+                                    <!-- BEGIN: isbn_row -->
+                                    <tr>
+                                        <td><strong>ISBN</strong></td>
+                                        <td>{BOOK.isbn}</td>
+                                    </tr>
+                                    <!-- END: isbn_row -->
+                                    <tr>
+                                        <td><strong>Giá</strong></td>
+                                        <td>{BOOK.price_format}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Tồn kho</strong></td>
+                                        <td>
+                                            <!-- BEGIN: in_stock_detail -->
+                                            {BOOK.stock_quantity} cuốn
+                                            <!-- END: in_stock_detail -->
+                                            <!-- BEGIN: out_of_stock_detail -->
+                                            Hết hàng
+                                            <!-- END: out_of_stock_detail -->
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Related Books -->
+        <!-- BEGIN: related_books -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <h3 class="mb-4">Sách liên quan</h3>
+                <div class="related-books row">
+                    <!-- BEGIN: related -->
+                    <div class="col-lg-3 col-md-4 col-sm-6 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h6 class="card-title">
+                                    <a href="{RELATED.link}" class="text-decoration-none">{RELATED.title}</a>
+                                </h6>
+                                <p class="card-text small text-muted">{RELATED.author}</p>
+                                <p class="card-text text-primary fw-bold">{RELATED.price_format}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END: related -->
+                </div>
+            </div>
+        </div>
+        <!-- END: related_books -->
     </div>
-    <!-- END: related_books -->
 </div>
 
-<style>
-.book-detail .book-cover {
-    margin-bottom: 20px;
+<script>
+// Initialize Bootstrap tabs if available
+if (typeof bootstrap !== 'undefined') {
+    var triggerTabList = [].slice.call(document.querySelectorAll('#bookTabs button'))
+    triggerTabList.forEach(function (triggerEl) {
+        var tabTrigger = new bootstrap.Tab(triggerEl)
+        triggerEl.addEventListener('click', function (event) {
+            event.preventDefault()
+            tabTrigger.show()
+        })
+    })
 }
-
-.book-detail .no-image-placeholder {
-    padding: 40px;
-    background: #f5f5f5;
-    border: 2px dashed #ddd;
-    color: #999;
-    border-radius: 5px;
-}
-
-.book-detail .book-title {
-    color: #333;
-    margin-top: 0;
-}
-
-.book-detail .book-meta table td {
-    border-top: none;
-}
-
-.book-detail .book-description {
-    margin-top: 20px;
-}
-
-.related-books {
-    margin-top: 40px;
-    padding-top: 20px;
-    border-top: 1px solid #eee;
-}
-
-.related-book-item {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.related-book-item .book-cover-small {
-    margin-bottom: 10px;
-}
-
-.related-book-item .no-image-placeholder-small {
-    padding: 20px;
-    background: #f5f5f5;
-    border: 1px solid #ddd;
-    color: #999;
-    border-radius: 3px;
-}
-
-.related-book-item .book-title-small {
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-.related-book-item .book-title-small a {
-    color: #333;
-    text-decoration: none;
-    font-size: 12px;
-}
-
-.related-book-item .book-title-small a:hover {
-    color: #337ab7;
-}
-
-.related-book-item .book-author-small {
-    color: #666;
-    font-size: 11px;
-}
-</style>
+</script>
 <!-- END: main -->
