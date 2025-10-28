@@ -15,7 +15,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 
 global $lang_module, $lang_global, $nv_Lang;
 
-$page_title = $nv_Lang->getModule('main');
+$page_title = $nv_Lang->getModule('book_list');
 
 // Filter by category
 $cat_id = $nv_Request->get_int('cat_id', 'get', 0);

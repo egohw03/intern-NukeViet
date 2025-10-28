@@ -1,0 +1,21 @@
+{
+    "time": "Tue, 28 Oct 2025 19:38:54 +0100",
+    "server": "localhost",
+    "ip": "::1",
+    "errno": "1 (Error)",
+    "errstr": "Uncaught PDOException: SQLSTATE&lbrack;42S22&rbrack;: Column not found: 1054 Unknown column 'order_date' in 'where clause' in /includes/vendor/vinades/nukeviet/Core/Database.php:544",
+    "file": "/includes/vendor/vinades/nukeviet/Core/Database.php",
+    "line": 544,
+    "request": "/nukeviet-nukeviet5.0/admin/vi/bookmanager/",
+    "method": "GET",
+    "agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0",
+    "backtrace": [
+        "#0 /includes/vendor/vinades/nukeviet/Core/Database.php(544): PDO->query('SELECT SUM(tota...', NULL)",
+        "#1 /modules/bookmanager/admin/dashboard.php(19): NukeViet/Core/Database->query('SELECT SUM(tota...')",
+        "#2 /modules/bookmanager/admin/main.php(19): include('C:/xampp/htdocs...')",
+        "#3 /admin/index.php(170): require('C:/xampp/htdocs...')",
+        "#4 {main}",
+        "thrown"
+    ]
+}
+-------------------
