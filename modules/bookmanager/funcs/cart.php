@@ -36,6 +36,49 @@ while ($row = $result->fetch()) {
 }
 $total_format = number_format($total, 0, ',', '.') . ' VND';
 
+// Handle coupon application
+$coupon_code = $nv_Request->get_title('coupon_code', 'post', '');
+$discount = 0;
+$coupon_error = '';
+$coupon_applied = false;
+
+if ($nv_Request->isset_request('apply_coupon', 'post') && !empty($coupon_code)) {
+    $current_time = NV_CURRENTTIME;
+    $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_coupons WHERE code = :code AND status = 1 AND start_time <= :current_time AND end_time >= :current_time';
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':code', $coupon_code, PDO::PARAM_STR);
+    $stmt->bindParam(':current_time', $current_time, PDO::PARAM_INT);
+    $stmt->execute();
+    $coupon = $stmt->fetch();
+
+    if ($coupon) {
+        if ($coupon['type'] == 0) { // Percentage
+            $discount = $total * ($coupon['value'] / 100);
+        } else { // Fixed amount
+            $discount = min($coupon['value'], $total);
+        }
+        $coupon_applied = true;
+        // Store coupon in session for checkout
+        $_SESSION[$module_data]['coupon'] = [
+            'code' => $coupon_code,
+            'discount' => $discount
+        ];
+    } else {
+        $coupon_error = $nv_Lang->getModule('invalid_coupon');
+    }
+}
+
+// Apply stored coupon if exists
+if (isset($_SESSION[$module_data]['coupon'])) {
+    $discount = $_SESSION[$module_data]['coupon']['discount'];
+    $coupon_applied = true;
+    $coupon_code = $_SESSION[$module_data]['coupon']['code'];
+}
+
+$final_total = $total - $discount;
+$final_total_format = number_format($final_total, 0, ',', '.') . ' VND';
+$discount_format = number_format($discount, 0, ',', '.') . ' VND';
+
 // Handle update cart
 if ($nv_Request->isset_request('update_cart', 'post')) {
     $quantities = $nv_Request->get_array('quantity', 'post');
@@ -67,7 +110,7 @@ $array_mod_title[] = [
     'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cart'
 ];
 
-$contents = book_cart_theme($cart_items, $total, $total_format);
+$contents = book_cart_theme($cart_items, $total, $total_format, $discount, $discount_format, $final_total, $final_total_format, $coupon_code, $coupon_error, $coupon_applied);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);

@@ -96,9 +96,38 @@
                         </div>
                         <div class="card-body">
                             <div class="d-flex justify-content-between mb-3">
-                                <span>Tổng tiền ({NUM_ITEMS} sản phẩm):</span>
-                                <strong class="text-primary h4 mb-0">{TOTAL}</strong>
+                            <span>Tổng tiền ({NUM_ITEMS} sản phẩm):</span>
+                            <strong class="text-primary h4 mb-0">{TOTAL}</strong>
                             </div>
+
+                            <!-- Coupon Section -->
+                            <div class="coupon-section mb-3">
+                                <label class="form-label fw-bold">{LANG.apply_coupon}</label>
+                                <div class="input-group">
+                                    <input type="text" name="coupon_code" value="{COUPON_CODE}" class="form-control" placeholder="{LANG.coupon_code}">
+                                    <button type="submit" name="apply_coupon" class="btn btn-outline-primary">{LANG.apply_coupon}</button>
+                                </div>
+                                <!-- BEGIN: coupon_error -->
+                                <div class="text-danger small mt-1">{COUPON_ERROR}</div>
+                                <!-- END: coupon_error -->
+                                <!-- BEGIN: coupon_applied -->
+                                <div class="text-success small mt-1">{LANG.coupon_applied}</div>
+                                <!-- END: coupon_applied -->
+                            </div>
+
+                            <!-- BEGIN: discount_row -->
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>{LANG.discount}:</span>
+                                <strong class="text-success">-{DISCOUNT}</strong>
+                            </div>
+                            <!-- END: discount_row -->
+
+                            <!-- BEGIN: final_total -->
+                            <div class="d-flex justify-content-between mb-3 border-top pt-3">
+                                <span class="fw-bold">{LANG.total}:</span>
+                                <strong class="text-primary h4 mb-0">{FINAL_TOTAL}</strong>
+                            </div>
+                            <!-- END: final_total -->
 
                             <div class="d-grid gap-2">
                                 <a href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=checkout" class="btn btn-success btn-lg">

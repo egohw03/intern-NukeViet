@@ -42,7 +42,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $book['publisher'] = $nv_Request->get_title('publisher', 'post', '');
     $book['publish_year'] = $nv_Request->get_int('publish_year', 'post', 0);
     $book['isbn'] = $nv_Request->get_title('isbn', 'post', '');
-    $book['description'] = $nv_Request->get_textarea('description', '', NV_ALLOWED_HTML_TAGS);
+    $book['description'] = $nv_Request->get_textarea('description', '', '', NV_ALLOWED_HTML_TAGS);
     $book['price'] = $nv_Request->get_float('price', 'post', 0);
     $book['stock_quantity'] = $nv_Request->get_int('stock_quantity', 'post', 0);
     $book['status'] = $nv_Request->get_int('status', 'post', 1);

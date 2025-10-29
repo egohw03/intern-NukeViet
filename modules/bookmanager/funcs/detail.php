@@ -40,6 +40,40 @@ $book['image_url'] = !empty($book['image']) ? NV_BASE_SITEURL . NV_UPLOADS_DIR .
 $book['category'] = $category;
 $book['price_format'] = number_format($book['price'], 0, ',', '.') . ' VND';
 
+// Get approved reviews
+$sql = 'SELECT r.*, u.username FROM ' . NV_PREFIXLANG . '_' . $module_data . '_reviews r
+LEFT JOIN ' . NV_USERS_GLOBALTABLE . ' u ON r.userid = u.userid
+WHERE r.book_id = ' . $id . ' AND r.status = 1
+ORDER BY r.add_time DESC';
+$reviews = $db->query($sql)->fetchAll();
+
+// Calculate average rating
+$avg_rating = 0;
+$total_reviews = count($reviews);
+if ($total_reviews > 0) {
+    $sum_rating = array_sum(array_column($reviews, 'rating'));
+    $avg_rating = round($sum_rating / $total_reviews, 1);
+}
+
+// Handle review submission
+if ($nv_Request->isset_request('submit_review', 'post') && defined('NV_IS_USER')) {
+    $rating = $nv_Request->get_int('rating', 'post', 5);
+    $title = $nv_Request->get_title('review_title', 'post', '');
+    $content = $nv_Request->get_textarea('review_content', 'post', '', '');
+
+    if ($rating >= 1 && $rating <= 5 && !empty($content)) {
+        $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_reviews (book_id, userid, rating, title, content, add_time, status) VALUES (:book_id, :userid, :rating, :title, :content, :add_time, 0)';
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':book_id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':userid', $user_info['userid'], PDO::PARAM_INT);
+        $stmt->bindParam(':rating', $rating, PDO::PARAM_INT);
+        $stmt->bindParam(':title', $title, PDO::PARAM_STR);
+        $stmt->bindParam(':content', $content, PDO::PARAM_STR);
+        $stmt->bindValue(':add_time', NV_CURRENTTIME, PDO::PARAM_INT);
+        $stmt->execute();
+    }
+}
+
 // Handle add to cart
 if ($nv_Request->isset_request('add_to_cart', 'post')) {
     if (!defined('NV_IS_USER')) {
@@ -71,7 +105,7 @@ $array_mod_title[] = [
     'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name
 ];
 
-$contents = book_detail_theme($book);
+$contents = book_detail_theme($book, $reviews, $avg_rating, $total_reviews);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);

@@ -103,7 +103,10 @@
                         <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab" aria-controls="description" aria-selected="true">{LANG.description}</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="details-tab" data-bs-toggle="tab" data-bs-target="#details" type="button" role="tab" aria-controls="details" aria-selected="false">Chi tiết sách</button>
+                    <button class="nav-link" id="details-tab" data-bs-toggle="tab" data-bs-target="#details" type="button" role="tab" aria-controls="details" aria-selected="false">Chi tiết sách</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab" aria-controls="reviews" aria-selected="false">{LANG.reviews} ({TOTAL_REVIEWS})</button>
                     </li>
                 </ul>
                 <div class="tab-content mt-3" id="bookTabsContent">
@@ -169,6 +172,71 @@
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                    <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+                        <!-- BEGIN: reviews -->
+                        <div class="reviews-section">
+                        <div class="average-rating mb-4">
+                        <h4>{LANG.average_rating}: {AVG_RATING}/5 ★</h4>
+                        <small class="text-muted">{TOTAL_REVIEWS} {LANG.total_reviews}</small>
+                        </div>
+
+                        <!-- BEGIN: review_loop -->
+                        <div class="review-item mb-4 p-3 border rounded">
+                        <div class="review-header d-flex justify-content-between align-items-start mb-2">
+                        <div>
+                        <strong>{REVIEW.username}</strong>
+                        <div class="rating">
+                        {REVIEW.rating}/5 ★
+                        </div>
+                        </div>
+                        <small class="text-muted">{REVIEW.add_time_format}</small>
+                        </div>
+                        <!-- BEGIN: review_title -->
+                        <h6 class="review-title">{REVIEW.title}</h6>
+                        <!-- END: review_title -->
+                        <div class="review-content">
+                        {REVIEW.content}
+                        </div>
+                        </div>
+                        <!-- END: review_loop -->
+                        </div>
+                        <!-- END: reviews -->
+
+                        <!-- BEGIN: no_reviews -->
+                        <div class="no-reviews text-center py-4">
+                        <i class="fas fa-comments fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">{LANG.no_reviews}</p>
+                        </div>
+                        <!-- END: no_reviews -->
+
+                        <!-- BEGIN: review_form -->
+                        <div class="review-form mt-4">
+                        <h5>{LANG.write_review}</h5>
+                        <form method="post" action="">
+                        <div class="mb-3">
+                        <label class="form-label">{LANG.rating}</label>
+                        <select name="rating" class="form-select" required>
+                        <option value="">{LANG.select_rating}</option>
+                        <option value="5">5 ★ - Xuất sắc</option>
+                        <option value="4">4 ★ - Tốt</option>
+                        <option value="3">3 ★ - Bình thường</option>
+                        <option value="2">2 ★ - Tệ</option>
+                        <option value="1">1 ★ - Rất tệ</option>
+                        </select>
+                        </div>
+                        <div class="mb-3">
+                        <label class="form-label">{LANG.review_title} ({LANG.optional})</label>
+                        <input type="text" name="review_title" class="form-control" maxlength="255">
+                        </div>
+                        <div class="mb-3">
+                        <label class="form-label">{LANG.review_content}</label>
+                        <textarea name="review_content" class="form-control" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" name="submit_review" class="btn btn-primary">{LANG.submit_review}</button>
+                        </form>
+                        </div>
+                        <!-- END: review_form -->
                     </div>
                 </div>
             </div>

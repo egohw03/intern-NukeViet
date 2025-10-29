@@ -117,7 +117,7 @@ function book_main_theme($books, $categories, $cat_id, $base_url, $page, $num_pa
 /**
  * book_detail_theme()
  */
-function book_detail_theme($book)
+function book_detail_theme($book, $reviews = [], $avg_rating = 0, $total_reviews = 0)
 {
     global $nv_Lang, $module_upload;
 
@@ -125,6 +125,8 @@ function book_detail_theme($book)
     $xtpl->assign('LANG', $nv_Lang->getModule());
     $xtpl->assign('GLANG', $nv_Lang->getGlobal());
     $xtpl->assign('BOOK', $book);
+    $xtpl->assign('AVG_RATING', $avg_rating);
+    $xtpl->assign('TOTAL_REVIEWS', $total_reviews);
 
     // Image handling
     if (!empty($book['image_url'])) {
@@ -178,6 +180,23 @@ function book_detail_theme($book)
         $xtpl->parse('main.isbn_row');
     }
 
+    // Reviews
+    if (!empty($reviews)) {
+        foreach ($reviews as $review) {
+            $review['add_time_format'] = nv_date('d/m/Y H:i', $review['add_time']);
+            $xtpl->assign('REVIEW', $review);
+            $xtpl->parse('main.review_loop');
+        }
+        $xtpl->parse('main.reviews');
+    } else {
+        $xtpl->parse('main.no_reviews');
+    }
+
+    // Review form for logged-in users
+    if (defined('NV_IS_USER')) {
+        $xtpl->parse('main.review_form');
+    }
+
     // Related books (placeholder - can be implemented later)
     // For now, we'll skip this or add dummy data
 
@@ -188,13 +207,18 @@ function book_detail_theme($book)
 /**
  * book_cart_theme()
  */
-function book_cart_theme($cart_items, $total, $total_format)
+function book_cart_theme($cart_items, $total, $total_format, $discount = 0, $discount_format = '0 VND', $final_total = 0, $final_total_format = '0 VND', $coupon_code = '', $coupon_error = '', $coupon_applied = false)
 {
     global $nv_Lang;
 
     $xtpl = new XTemplate('cart.tpl', get_module_tpl_dir('cart.tpl'));
     $xtpl->assign('LANG', $nv_Lang->getModule());
     $xtpl->assign('GLANG', $nv_Lang->getGlobal());
+    $xtpl->assign('DISCOUNT', $discount_format);
+    $xtpl->assign('FINAL_TOTAL', $final_total_format);
+    $xtpl->assign('COUPON_CODE', $coupon_code);
+    $xtpl->assign('COUPON_ERROR', $coupon_error);
+    $xtpl->assign('COUPON_APPLIED', $coupon_applied);
 
     if (!empty($cart_items)) {
         foreach ($cart_items as $item) {

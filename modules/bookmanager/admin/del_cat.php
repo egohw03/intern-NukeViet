@@ -22,7 +22,7 @@ $sql = 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_books WH
 $count_books = $db->query($sql)->fetchColumn();
 
 if ($count_books > 0) {
-    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=categories');
+    nv_info_die($lang_module['error_cat_has_books'], $lang_module['error'], 0);
 }
 
 // Delete category

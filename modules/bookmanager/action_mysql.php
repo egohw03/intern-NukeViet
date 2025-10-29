@@ -14,31 +14,18 @@ if (!defined('NV_IS_FILE_MODULES'))
 /*
 INSTRUCTIONS FOR TESTING:
 
-1. Create 5 test users in NukeViet admin panel with these details:
-   - User 1: Nguyen Van A (nguyenvana@example.com) - ID will be 1
-   - User 2: Tran Thi B (tranthib@example.com) - ID will be 2
-   - User 3: Le Van C (levanc@example.com) - ID will be 3
-   - User 4: Pham Thi D (phamthid@example.com) - ID will be 4
-   - User 5: Hoang Van E (hoangvane@example.com) - ID will be 5
-
-2. Or manually insert users into database table nv4_users:
-   INSERT INTO nv4_users (username, email, password, active) VALUES
-   ('nguyenvana', 'nguyenvana@example.com', MD5('password123'), 1),
-   ('tranthib', 'tranthib@example.com', MD5('password123'), 1),
-   ('levanc', 'levanc@example.com', MD5('password123'), 1),
-   ('phamthid', 'phamthid@example.com', MD5('password123'), 1),
-   ('hoangvane', 'hoangvane@example.com', MD5('password123'), 1);
-
-3. After module installation, each user will have:
-   - Individual shopping cart with sample items
-   - Order history with different statuses
-   - Access to all books and categories
+After module installation, you will have:
+- Sample book categories and books for testing
+- Empty cart and orders tables (ready for user data)
 */
 
 $sql_drop_module = array();
 $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_cart";
 $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_orders";
 $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_order_items";
+$sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_reviews";
+$sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_coupons";
+$sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_addresses";
 $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_categories";
 $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_books";
 
@@ -93,6 +80,10 @@ customer_email VARCHAR(255) NOT NULL,
 customer_phone VARCHAR(20) DEFAULT NULL,
 customer_address TEXT NOT NULL,
 total_amount DECIMAL(15,2) NOT NULL DEFAULT 0.00,
+coupon_code VARCHAR(50) DEFAULT NULL,
+discount_amount DECIMAL(15,2) NOT NULL DEFAULT 0.00,
+transaction_id VARCHAR(100) DEFAULT NULL,
+payment_info TEXT DEFAULT NULL,
 order_status TINYINT(1) NOT NULL DEFAULT 0,
 payment_status TINYINT(1) NOT NULL DEFAULT 0,
 payment_method VARCHAR(50) DEFAULT NULL,
@@ -129,6 +120,45 @@ add_time INT(11) NOT NULL,
 PRIMARY KEY (id),
 KEY idx_userid (userid),
 KEY idx_book_id (book_id)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8";
+
+// Reviews table
+$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_reviews (
+id INT(11) NOT NULL AUTO_INCREMENT,
+book_id INT(11) NOT NULL,
+userid INT(11) NOT NULL,
+rating TINYINT(1) NOT NULL DEFAULT 5,
+title VARCHAR(255) DEFAULT NULL,
+content TEXT DEFAULT NULL,
+add_time INT(11) NOT NULL,
+status TINYINT(1) NOT NULL DEFAULT 0,
+PRIMARY KEY (id),
+KEY idx_book_id (book_id),
+KEY idx_status (status)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8";
+
+// Coupons table
+$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_coupons (
+id INT(11) NOT NULL AUTO_INCREMENT,
+code VARCHAR(50) NOT NULL UNIQUE,
+type TINYINT(1) NOT NULL DEFAULT 0,
+value DECIMAL(15,2) NOT NULL,
+start_time INT(11) NOT NULL,
+end_time INT(11) NOT NULL,
+status TINYINT(1) NOT NULL DEFAULT 1,
+PRIMARY KEY (id)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8";
+
+// User addresses table
+$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_addresses (
+id INT(11) NOT NULL AUTO_INCREMENT,
+userid INT(11) NOT NULL,
+full_name VARCHAR(255) NOT NULL,
+phone VARCHAR(20) NOT NULL,
+address TEXT NOT NULL,
+is_default TINYINT(1) NOT NULL DEFAULT 0,
+PRIMARY KEY (id),
+KEY idx_userid (userid)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8";
 
 // Insert sample categories (Vietnamese)
@@ -179,49 +209,32 @@ $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_"
 (9, 'English Grammar in Use', 'english-grammar-in-use', 'Raymond Murphy', 'Cambridge University Press', 2019, '978-1108457651', 'Sach ngu phap Tieng Anh kinh dien.', 150000.00, 25, " . NV_CURRENTTIME . ", 1),
 (10, 'Dac nhan tam', 'dac-nhan-tam', 'Dale Carnegie', 'NXB Lao dong Xa hoi', 2016, '978-6041150000', 'Sach kinh dien ve phat trien ky nang giao tiep.', 90000.00, 35, " . NV_CURRENTTIME . ", 1)";
 
-// Insert sample order (simplified)
-$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_orders (userid, order_code, customer_name, customer_email, customer_phone, customer_address, total_amount, order_status, payment_status, payment_method, order_note, add_time, edit_time) VALUES
-(1, 'ORD001', 'Nguyen Van A', 'nguyenvana@example.com', '0123456789', '123 Duong ABC, Ha Noi', 320000.00, 2, 1, 'COD', 'Giao hang nhanh', " . (NV_CURRENTTIME - 86400) . ", " . NV_CURRENTTIME . ")";
+// Insert sample orders (without user dependencies for demo)
+$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_orders (userid, order_code, customer_name, customer_email, customer_phone, customer_address, total_amount, coupon_code, discount_amount, transaction_id, payment_info, order_status, payment_status, payment_method, order_note, add_time, edit_time) VALUES
+(0, 'ORD001', 'Nguyen Van A', 'nguyenvana@example.com', '0123456789', '123 Duong ABC, Ha Noi', 500000.00, '', 0.00, NULL, NULL, 2, 1, 'COD', 'Giao hang nhanh', " . (NV_CURRENTTIME - 86400*2) . ", " . NV_CURRENTTIME . "),
+(0, 'ORD002', 'Tran Thi B', 'tranthib@example.com', '0987654321', '456 Duong XYZ, TP.HCM', 320000.00, 'WELCOME10', 32000.00, 'TXN001', 'Payment processed via bank transfer', 2, 1, 'Bank Transfer', 'Goi ky', " . (NV_CURRENTTIME - 86400*1) . ", " . NV_CURRENTTIME . "),
+(0, 'ORD003', 'Le Van C', 'levanc@example.com', '0111111111', '789 Duong DEF, Da Nang', 180000.00, '', 0.00, NULL, NULL, 0, 0, 'COD', 'Dang xu ly', " . NV_CURRENTTIME . ", NULL),
+(0, 'ORD004', 'Pham Thi D', 'phamthid@example.com', '0222222222', '321 Duong GHI, Can Tho', 750000.00, 'SUMMER20', 150000.00, 'TXN002', 'Credit card payment successful', 2, 1, 'Credit Card', 'Thanh toan online', " . (NV_CURRENTTIME - 86400*3) . ", " . NV_CURRENTTIME . "),
+(0, 'ORD005', 'Hoang Van E', 'hoangvane@example.com', '0333333333', '654 Duong JKL, Hai Phong', 400000.00, '', 0.00, NULL, NULL, 3, 0, 'COD', 'Khach hang huy', " . (NV_CURRENTTIME - 86400*7) . ", " . NV_CURRENTTIME . "),
+(0, 'ORD006', 'Test Customer', 'test@example.com', '0444444444', 'Test Address', 220000.00, '', 0.00, NULL, NULL, 1, 0, 'COD', 'Dang van chuyen', " . (NV_CURRENTTIME - 86400*5) . ", " . NV_CURRENTTIME . ")";
 
-// Insert sample cart items for different users (5 users with individual carts)
-$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_cart (userid, book_id, quantity, add_time) VALUES
-(1, 1, 2, " . NV_CURRENTTIME . "),
-(1, 5, 1, " . NV_CURRENTTIME . "),
-(1, 10, 3, " . NV_CURRENTTIME . "),
-(2, 3, 1, " . NV_CURRENTTIME . "),
-(2, 7, 2, " . NV_CURRENTTIME . "),
-(2, 12, 1, " . NV_CURRENTTIME . "),
-(3, 2, 1, " . NV_CURRENTTIME . "),
-(3, 8, 1, " . NV_CURRENTTIME . "),
-(3, 15, 2, " . NV_CURRENTTIME . "),
-(4, 4, 1, " . NV_CURRENTTIME . "),
-(4, 9, 1, " . NV_CURRENTTIME . "),
-(4, 18, 1, " . NV_CURRENTTIME . "),
-(5, 6, 1, " . NV_CURRENTTIME . "),
-(5, 11, 2, " . NV_CURRENTTIME . "),
-(5, 20, 1, " . NV_CURRENTTIME . ")";
-
-// Insert sample orders for different users (each user has their own orders)
-$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_orders (userid, order_code, customer_name, customer_email, customer_phone, customer_address, total_amount, order_status, payment_status, payment_method, order_note, add_time, edit_time) VALUES
-(1, 'ORD001', 'Nguyen Van A', 'nguyenvana@example.com', '0123456789', '123 Duong ABC, Ha Noi', 500000.00, 2, 1, 'COD', 'Giao hang nhanh', " . (NV_CURRENTTIME - 86400*7) . ", " . NV_CURRENTTIME . "),
-(1, 'ORD002', 'Nguyen Van A', 'nguyenvana@example.com', '0123456789', '123 Duong ABC, Ha Noi', 180000.00, 0, 0, 'COD', 'Dang xu ly', " . NV_CURRENTTIME . ", NULL),
-(2, 'ORD003', 'Tran Thi B', 'tranthib@example.com', '0987654321', '456 Duong XYZ, TP.HCM', 320000.00, 2, 1, 'Bank Transfer', 'Goi ky', " . (NV_CURRENTTIME - 86400*5) . ", " . NV_CURRENTTIME . "),
-(3, 'ORD004', 'Le Van C', 'levanc@example.com', '0111111111', '789 Duong DEF, Da Nang', 280000.00, 1, 0, 'COD', 'Dang van chuyen', " . (NV_CURRENTTIME - 86400*3) . ", " . NV_CURRENTTIME . "),
-(4, 'ORD005', 'Pham Thi D', 'phamthid@example.com', '0222222222', '321 Duong GHI, Can Tho', 750000.00, 2, 1, 'Credit Card', 'Thanh toan online', " . (NV_CURRENTTIME - 86400*2) . ", " . NV_CURRENTTIME . "),
-(5, 'ORD006', 'Hoang Van E', 'hoangvane@example.com', '0333333333', '654 Duong JKL, Hai Phong', 400000.00, 3, 0, 'COD', 'Khach hang huy', " . (NV_CURRENTTIME - 86400*10) . ", " . NV_CURRENTTIME . "),
-(2, 'ORD007', 'Tran Thi B', 'tranthib@example.com', '0987654321', '456 Duong XYZ, TP.HCM', 220000.00, 2, 1, 'COD', 'Giao thanh cong', " . (NV_CURRENTTIME - 86400*1) . ", " . NV_CURRENTTIME . ")";
-
-// Insert sample order items for all orders
+// Insert sample order items
 $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_order_items (order_id, book_id, quantity, price) VALUES
-(1, 1, 2, 180000.00),
-(1, 4, 1, 100000.00),
-(2, 5, 1, 180000.00),
-(3, 3, 1, 120000.00),
-(3, 7, 1, 200000.00),
-(4, 2, 1, 140000.00),
-(4, 8, 1, 140000.00),
-(5, 6, 1, 190000.00),
-(5, 9, 2, 175000.00),
-(5, 11, 1, 140000.00),
-(6, 10, 1, 400000.00),
-(7, 12, 1, 220000.00)";
+(1, 1, 2, 150000.00),
+(1, 4, 1, 200000.00),
+(2, 3, 1, 120000.00),
+(2, 7, 1, 200000.00),
+(3, 2, 1, 180000.00),
+(4, 6, 1, 190000.00),
+(4, 9, 2, 280000.00),
+(4, 11, 1, 400000.00),
+(5, 10, 1, 400000.00),
+(6, 12, 1, 220000.00)";
+
+// Insert sample coupons
+$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_coupons (code, type, value, start_time, end_time, status) VALUES
+('WELCOME10', 0, 10.00, " . NV_CURRENTTIME . ", " . (NV_CURRENTTIME + 2592000) . ", 1),
+('SUMMER20', 0, 20.00, " . NV_CURRENTTIME . ", " . (NV_CURRENTTIME + 2592000) . ", 1),
+('SAVE50K', 1, 50000.00, " . NV_CURRENTTIME . ", " . (NV_CURRENTTIME + 2592000) . ", 1)";
+
+

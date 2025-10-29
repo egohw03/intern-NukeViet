@@ -160,3 +160,73 @@ $lang_module['no_image'] = 'Không có hình ảnh';
 $lang_module['login_required'] = 'Vui lòng đăng nhập để thêm vào giỏ hàng';
 $lang_module['customer_info'] = 'Thông tin khách hàng';
 $lang_module['description'] = 'Mô tả';
+
+// New features - Reviews
+$lang_module['reviews'] = 'Đánh giá';
+$lang_module['review'] = 'Đánh giá';
+$lang_module['reviews_management'] = 'Quản lý đánh giá';
+$lang_module['add_review'] = 'Thêm đánh giá';
+$lang_module['edit_review'] = 'Sửa đánh giá';
+$lang_module['delete_review'] = 'Xóa đánh giá';
+$lang_module['rating'] = 'Đánh giá';
+$lang_module['review_title'] = 'Tiêu đề đánh giá';
+$lang_module['review_content'] = 'Nội dung đánh giá';
+$lang_module['approved'] = 'Đã duyệt';
+$lang_module['pending'] = 'Chờ duyệt';
+$lang_module['approve'] = 'Duyệt';
+$lang_module['no_reviews'] = 'Chưa có đánh giá nào';
+$lang_module['write_review'] = 'Viết đánh giá';
+$lang_module['submit_review'] = 'Gửi đánh giá';
+$lang_module['average_rating'] = 'Đánh giá trung bình';
+$lang_module['total_reviews'] = 'Tổng đánh giá';
+
+// New features - Coupons
+$lang_module['coupons'] = 'Mã giảm giá';
+$lang_module['coupon'] = 'Mã giảm giá';
+$lang_module['coupons_management'] = 'Quản lý mã giảm giá';
+$lang_module['add_coupon'] = 'Thêm mã giảm giá';
+$lang_module['edit_coupon'] = 'Sửa mã giảm giá';
+$lang_module['delete_coupon'] = 'Xóa mã giảm giá';
+$lang_module['coupon_code'] = 'Mã giảm giá';
+$lang_module['discount'] = 'Giảm giá';
+$lang_module['percentage'] = 'Phần trăm';
+$lang_module['fixed_amount'] = 'Số tiền cố định';
+$lang_module['apply_coupon'] = 'Áp dụng mã giảm giá';
+$lang_module['remove_coupon'] = 'Xóa mã giảm giá';
+$lang_module['invalid_coupon'] = 'Mã giảm giá không hợp lệ hoặc đã hết hạn';
+$lang_module['coupon_applied'] = 'Mã giảm giá đã được áp dụng';
+$lang_module['no_coupons'] = 'Chưa có mã giảm giá nào';
+
+// New features - Addresses
+$lang_module['addresses'] = 'Địa chỉ giao hàng';
+$lang_module['address'] = 'Địa chỉ';
+$lang_module['add_address'] = 'Thêm địa chỉ';
+$lang_module['edit_address'] = 'Sửa địa chỉ';
+$lang_module['delete_address'] = 'Xóa địa chỉ';
+$lang_module['default_address'] = 'Địa chỉ mặc định';
+
+// New features - Search
+$lang_module['search_placeholder'] = 'Tìm kiếm sách theo tên, tác giả...';
+$lang_module['all_categories'] = 'Tất cả thể loại';
+$lang_module['no_search_results'] = 'Không tìm thấy kết quả nào';
+
+// New features - Order status
+$lang_module['order_pending'] = 'Chờ xử lý';
+$lang_module['order_processing'] = 'Đang xử lý';
+$lang_module['order_delivered'] = 'Đã giao hàng';
+$lang_module['order_cancelled'] = 'Đã hủy';
+$lang_module['payment_pending'] = 'Chưa thanh toán';
+$lang_module['payment_paid'] = 'Đã thanh toán';
+
+// Error messages
+$lang_module['error_cat_has_books'] = 'Không thể xóa thể loại vì vẫn còn sách trong thể loại này';
+$lang_module['error_delete'] = 'Lỗi khi xóa';
+$lang_module['confirm_delete'] = 'Bạn có chắc chắn muốn xóa?';
+
+// Additional language keys
+$lang_module['select_rating'] = 'Chọn đánh giá';
+$lang_module['optional'] = 'không bắt buộc';
+
+// Admin menu
+$lang_module['reviews'] = 'Quản lý đánh giá';
+$lang_module['coupons'] = 'Quản lý mã giảm giá';

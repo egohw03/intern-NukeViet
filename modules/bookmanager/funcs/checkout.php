@@ -62,8 +62,17 @@ if ($nv_Request->isset_request('place_order', 'post')) {
         // Generate order code
         $order_code = 'ORD' . date('YmdHis') . rand(100, 999);
 
+        // Handle coupon
+        $coupon_code = '';
+        $discount_amount = 0;
+        if (isset($_SESSION[$module_data]['coupon'])) {
+            $coupon_code = $_SESSION[$module_data]['coupon']['code'];
+            $discount_amount = $_SESSION[$module_data]['coupon']['discount'];
+        }
+        $final_total = $total - $discount_amount;
+
         // Insert order
-        $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_orders (userid, order_code, customer_name, customer_email, customer_phone, customer_address, total_amount, order_status, payment_status, payment_method, order_note, add_time) VALUES (:userid, :order_code, :customer_name, :customer_email, :customer_phone, :customer_address, :total_amount, 0, 0, :payment_method, :order_note, :add_time)';
+        $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_orders (userid, order_code, customer_name, customer_email, customer_phone, customer_address, total_amount, coupon_code, discount_amount, order_status, payment_status, payment_method, order_note, add_time) VALUES (:userid, :order_code, :customer_name, :customer_email, :customer_phone, :customer_address, :total_amount, :coupon_code, :discount_amount, 0, 0, :payment_method, :order_note, :add_time)';
         $stmt = $db->prepare($sql);
         $stmt->bindParam(':userid', $user_info['userid'], PDO::PARAM_INT);
         $stmt->bindParam(':order_code', $order_code, PDO::PARAM_STR);
@@ -71,7 +80,9 @@ if ($nv_Request->isset_request('place_order', 'post')) {
         $stmt->bindParam(':customer_email', $customer_email, PDO::PARAM_STR);
         $stmt->bindParam(':customer_phone', $customer_phone, PDO::PARAM_STR);
         $stmt->bindParam(':customer_address', $customer_address, PDO::PARAM_STR);
-        $stmt->bindParam(':total_amount', $total, PDO::PARAM_STR);
+        $stmt->bindParam(':total_amount', $final_total, PDO::PARAM_STR);
+        $stmt->bindParam(':coupon_code', $coupon_code, PDO::PARAM_STR);
+        $stmt->bindParam(':discount_amount', $discount_amount, PDO::PARAM_STR);
         $stmt->bindParam(':payment_method', $payment_method, PDO::PARAM_STR);
         $stmt->bindParam(':order_note', $order_note, PDO::PARAM_STR);
         $stmt->bindValue(':add_time', NV_CURRENTTIME, PDO::PARAM_INT);
@@ -94,6 +105,11 @@ if ($nv_Request->isset_request('place_order', 'post')) {
 
         // Clear cart
         $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cart WHERE userid = ' . $user_info['userid']);
+
+        // Clear coupon session
+        if (isset($_SESSION[$module_data]['coupon'])) {
+            unset($_SESSION[$module_data]['coupon']);
+        }
 
         // Redirect to success page
         nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=success&order_code=' . $order_code);

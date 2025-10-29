@@ -75,6 +75,7 @@ $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('CAT_ID', $cat_id);
 $xtpl->assign('SORT_BY', $sort_by);
+$sort_order_toggle = ($sort_order == 'desc') ? 'asc' : 'desc';
 $xtpl->assign('SORT_ORDER', $sort_order_toggle);
 
 // Filter categories
@@ -85,7 +86,6 @@ foreach ($categories as $cat) {
 }
 
 // Sort parameters for template
-$sort_order_toggle = ($sort_order == 'desc') ? 'asc' : 'desc';
 
 if (!empty($processed_books)) {
 foreach ($processed_books as $book) {

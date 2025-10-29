@@ -1,0 +1,20 @@
+{
+    "time": "Wed, 29 Oct 2025 23:46:34 +0100",
+    "server": "localhost",
+    "ip": "::1",
+    "errno": "1 (Error)",
+    "errstr": "Uncaught PDOException: SQLSTATE&lbrack;42S02&rbrack;: Base table or view not found: 1932 Table 'nukeviet5_db.nv5_config' doesn't exist in engine in /includes/vendor/vinades/nukeviet/Core/Database.php:544",
+    "file": "/includes/vendor/vinades/nukeviet/Core/Database.php",
+    "line": 544,
+    "request": "/nukeviet-nukeviet5.0/bookmanager/",
+    "method": "GET",
+    "agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0",
+    "backtrace": [
+        "#0 /includes/vendor/vinades/nukeviet/Core/Database.php(544): PDO->query('UPDATE nv5_conf...', NULL)",
+        "#1 /includes/mainfile.php(507): NukeViet/Core/Database->query('UPDATE nv5_conf...')",
+        "#2 /index.php(17): require('C:/xampp/htdocs...')",
+        "#3 {main}",
+        "thrown"
+    ]
+}
+-------------------
